@@ -53,6 +53,31 @@ Esto funciona para cualquier trabajo estructurado: una funcionalidad de software
 
 ---
 
+## ¿Usar Codex o Claude Code?
+
+Puedes elegir con qué asistente trabajar sobre tus archivos. **Esta versión del kit incluye la configuración y las habilidades para Claude Code; la adaptación completa de los flujos a Codex todavía está pendiente.**
+
+| Opción | Qué puedes hacer con esta versión | Por dónde empezar |
+|--------|----------------------------------|-------------------|
+| **Claude Code** | Seguir la configuración del kit y utilizar sus habilidades originales en inglés, conversando en español. | Sigue [Primeros pasos](#primeros-pasos) y la [guía de configuración de Tamarindos](SETUP.md). |
+| **Codex** | Trabajar con los documentos de tu copia mediante solicitudes en español. La instalación y activación de las habilidades de este kit aún requieren adaptación y pruebas. | Consulta la [guía oficial de inicio de Codex](https://developers.openai.com/codex/quickstart) y abre tu copia local como proyecto. |
+
+### Si eliges Claude Code
+
+Continúa con los pasos de instalación de esta página. Las referencias a `/setup`, `/orient`, `/pickup` y los demás comandos corresponden al flujo original de Claude Code.
+
+### Si eliges Codex
+
+Después de configurar Codex y abrir la carpeta de tu copia, puedes empezar con una solicitud como:
+
+> Responde en español. Revisa los documentos de esta carpeta y explícame cómo está organizado mi espacio de Tamarindos. Por ahora, solo consulta los archivos. Las habilidades de este kit están escritas para Claude Code y todavía no están adaptadas para Codex.
+
+Los pasos de instalación de habilidades y los comandos de Claude Code que aparecen más abajo no constituyen una configuración de Codex. La versión compatible con ambos necesita instrucciones y carga de habilidades específicas para cada herramienta.
+
+Obsidian sigue siendo el lugar donde puedes leer y organizar tus notas. Al cambiar de asistente, los documentos guardados conservan el contexto disponible; el historial del chat no se transfiere automáticamente.
+
+---
+
 ## Primeros pasos
 
 ### Qué necesitas
