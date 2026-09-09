@@ -1,195 +1,445 @@
 # Tamarindos Workflow Kit
 
-**Un sistema de productividad personal que une Claude Code (inteligencia artificial) y Obsidian (notas) en un espacio donde tú y la IA trabajan con los mismos archivos, el mismo contexto y el mismo historial. Todo en español.**
+Un sistema de productividad personal que combina Claude (IA) con Obsidian (notas) para crear un espacio de trabajo compartido donde tú y la IA construyen sobre los mismos archivos, el mismo contexto y el mismo historial.
 
-Aquí puedes investigar, organizar información, tomar decisiones, planificar mejoras y dar seguimiento al trabajo de Tamarindos. Lo que documentas hoy queda disponible para las próximas sesiones.
+## Por qué existe
 
-Basado en [Workflow Kit de Holden Greene](https://github.com/hgreene624/workflow-kit). Las habilidades (*skills*) y los comandos se conservan en inglés; la bienvenida y la conversación son en español.
+La mayor limitación de trabajar con IA hoy es la memoria. Las ventanas de chat se saturan, el contexto se degrada y todo lo que construyen juntos nace y termina dentro de una conversación. Empiezas desde cero cada vez. Te repites. La IA olvida lo que le dijiste ayer.
 
-## ¿Por qué existe?
+Workflow Kit resuelve esto dándoles a ti y a la IA un **sistema de archivos compartido**. Tu bóveda es simplemente una carpeta de archivos de texto en tu computadora, pero esos archivos se convierten en almacenamiento persistente que tanto tú como la IA pueden leer, escribir y ampliar entre sesiones. Cuanto más lo usas, más inteligente se vuelve tu IA, porque dispone de un repositorio cada vez mayor de tu trabajo, tus decisiones, el historial de tus proyectos y tus preferencias.
 
-Cuando trabajas con IA únicamente dentro de una conversación, mantener la continuidad se vuelve difícil. El chat crece, los detalles importantes quedan enterrados y, al abrir una sesión nueva, puedes terminar explicando otra vez el problema, las decisiones y lo que ya habías avanzado.
+Esto no es solo una interfaz alrededor de un chat. Es un sistema que:
 
-Workflow Kit da continuidad a ese trabajo mediante una carpeta compartida entre tú y Claude. Esa carpeta, llamada **bóveda** en Obsidian, contiene archivos de texto: notas, acuerdos, planes, reportes, pendientes y lecciones. Tú puedes leerlos y editarlos en Obsidian; Claude Code puede consultarlos y actualizarlos cuando trabajan juntos.
+- **Guarda todo lo que haces** como archivos organizados que la IA puede consultar después.
+- **Construye tu base de conocimiento personal** automáticamente a través del propio trabajo, sin depender de documentarlo manualmente.
+- **Te permite retomar cualquier proyecto al instante**, incluso semanas después, porque el contexto está en los archivos, no en tu cabeza.
+- **Mejora con el tiempo** a medida que tu bóveda acumula registros de proyectos, lecciones e historial de trabajo.
 
-El contexto queda en tus archivos y puede recuperarse entre sesiones. Por ejemplo, si hace tres semanas definiste un cambio en reservaciones, la siguiente sesión puede consultar el plan, revisar el avance registrado y ayudarte a continuar.
+Para conocer con más detalle cómo se conectan todas las piezas, consulta [Cómo funciona todo](WORKFLOW.md).
 
-Con el uso, tu espacio reúne más información sobre tu trabajo: qué decidiste, por qué lo decidiste, qué funcionó y qué sigue pendiente. Claude puede apoyarse en ese contexto para ayudarte con mayor continuidad y menos explicaciones repetidas. Esa continuidad depende de guardar los avances y consultar los documentos pertinentes.
+---
 
-El sistema te ayuda a:
+## Para quién es
 
-- **Conservar el trabajo como archivos organizados**, para que tú y Claude puedan consultarlo después.
-- **Construir una base de conocimiento personal mientras trabajas**, al registrar acuerdos, resultados y lecciones durante las tareas.
-- **Retomar proyectos después de días o semanas**, recuperando el contexto y los siguientes pasos documentados.
-- **Aprovechar la experiencia acumulada**, usando el historial de proyectos y decisiones como referencia para el trabajo nuevo.
+**Profesionales con conocimientos técnicos que no son programadores.** Administradores de TI, gerentes de operaciones, coordinadores de proyectos, jefes de departamento, responsables de hotelería y consultores. Personas con capacidad técnica, que se sienten cómodas usando una terminal y realizan trabajo estructurado que implica investigación, decisiones, documentación y seguimiento.
 
-Para entender cómo se conectan las notas, los proyectos y las sesiones, consulta [Cómo funciona el trabajo diario](WORKFLOW.md).
+Si perteneces a esta categoría, puedes beneficiarte de esta tecnología ahora mismo más que casi cualquier otra persona. Los asistentes de programación con IA ya están maduros, pero los sistemas de productividad con IA para trabajo que no es programación apenas están surgiendo. Workflow Kit cubre ese espacio.
 
-## ¿Para quién es?
+No necesitas saber programar. Necesitas sentirte cómodo escribiendo comandos en una terminal y organizando archivos. De todo lo demás se encarga Claude.
 
-Para personas que coordinan trabajo, resuelven problemas y necesitan dar seguimiento: responsables de operación, administración, cocina, servicio, reservaciones, mantenimiento, marketing y dirección de Tamarindos.
+### Ejemplos reales por función
 
-Es especialmente útil cuando tu trabajo implica investigar, comparar opciones, documentar acuerdos, coordinar responsables o convertir una idea en pasos concretos. Cada persona adapta su copia a su función y sus necesidades.
+**TI / Administración de redes:** Graba una visita a un sitio narrando tu inventario de dispositivos. Claude genera archivos Markdown con números de serie, ubicaciones y configuraciones. Construye poco a poco una topología completa de la red que Claude pueda consultar al resolver problemas. Cuando aparezca un bucle de VLAN a las 2 de la mañana, Claude ya conocerá la distribución de tu red.
 
-**No necesitas saber programar.** Necesitas aprender a abrir tu carpeta, escribir algunos comandos en la terminal y organizar archivos. La guía de esta página te acompaña en la instalación; después puedes pedirle ayuda a Claude en español para trabajar paso a paso.
+**Operaciones de restaurante / hotel:** Graba la investigación de un incidente. Claude la transcribe, genera un reporte estructurado y crea un ticket en tu sistema de seguimiento de incidencias. El próximo mes, pregunta «¿Cuáles fueron todos los incidentes de este mes?» y obtén un resumen en segundos.
 
-### Ejemplos por función
+**Gerencia / Dirección:** Siéntate con tu jefe mientras enumera 15 solicitudes. Claude captura todo, lo clasifica según tus proyectos activos y no se pierde nada. Tres semanas después, cuando pregunte «¿Qué pasó con aquello?», tendrás la respuesta.
 
-**Operación y servicio:** Comparte las notas de una incidencia durante el servicio. Claude te ayuda a preparar un reporte con lo ocurrido, las acciones tomadas y los pendientes. Al cierre del mes, puedes pedirle que revise los reportes guardados y resuma los problemas recurrentes.
+**Consultoría / Asesoría:** Construye perfiles de clientes que se actualicen con cada interacción. Las notas de reuniones, los resúmenes de correos y el historial de proyectos se acumulan en una base de conocimiento con la que cualquier nuevo integrante del equipo, o una nueva sesión de IA, puede ponerse al día al instante.
 
-**Dirección y administración:** Después de una reunión con varios encargos, comparte tus notas o la transcripción. Claude te ayuda a separar los acuerdos, identificar responsables confirmados y registrar lo pendiente. Semanas después, puedes consultar qué ocurrió con cada encargo a partir del seguimiento documentado.
+---
 
-**Cocina e inventarios:** Documenta una revisión de inventario o una propuesta para mejorar un procedimiento. Claude puede organizar los datos que le compartes, ayudarte a definir la mejora y preparar un plan. El historial conserva las decisiones y los resultados registrados para la siguiente revisión.
+## Qué puedes hacer con el sistema
 
-**Mantenimiento y sistemas:** Registra una visita o revisión con equipos, ubicaciones, modelos y fallas observadas. Claude te ayuda a organizar esa información en fichas y reportes que podrá consultar cuando vuelvas a trabajar en esos equipos.
+**La versión breve:** Describes lo que quieres lograr y el sistema te guía:
 
-**Reservaciones y eventos:** Reúne requisitos, acuerdos y cambios de un evento en su carpeta de proyecto. Claude puede revisar ese contexto para preparar una lista de pendientes o ayudarte a retomar la coordinación sin reconstruir toda la conversación.
+1. **Define la especificación** -- Claude te hace preguntas para entender lo que intentas hacer y después lo redacta con claridad.
+2. **Revisa tu planteamiento** -- Un equipo de revisión de 3 agentes de IA busca vacíos, riesgos y cosas que podrías haber pasado por alto.
+3. **Planifica el trabajo** -- Lo divide en fases con hitos claros para que puedas seguir el avance.
+4. **Realiza el trabajo** -- Claude te ayuda a ejecutar cada fase, revisando la calidad durante el proceso.
+5. **Retoma donde te quedaste** -- Todo queda guardado. Inicia una sesión nueva y continúa exactamente donde te detuviste.
 
-**Marketing:** Guarda objetivos, propuestas, decisiones y resultados de una campaña. Al preparar la siguiente, Claude puede consultar ese historial y ayudarte a identificar qué repetir, qué cambiar y qué información todavía falta.
+Esto funciona para cualquier trabajo estructurado: una funcionalidad de software, un proceso de negocio, un plan de contratación, un rediseño de menú, un modelo de presupuesto o una migración de red. No es solo para programar.
 
-Estos ejemplos parten de notas, archivos o transcripciones que compartas. Las conexiones con correo, reservaciones, inventarios, transcripción de audio u otros sistemas se configuran por separado.
+---
 
-## ¿Qué puedes hacer con este sistema?
+## Primeros pasos
 
-Describe lo que quieres lograr y Claude te acompaña desde la idea hasta el seguimiento:
+### Qué necesitas
 
-1. **Definir el trabajo.** Te hace preguntas para aclarar el problema, el resultado esperado y los límites, y lo organiza en una especificación.
-2. **Revisar la propuesta.** El flujo de revisión ayuda a encontrar vacíos, riesgos y preguntas que conviene resolver antes de avanzar.
-3. **Preparar un plan.** Divide el trabajo en etapas con pasos y resultados que puedas comprobar.
-4. **Hacer el trabajo.** Te ayuda a ejecutar el plan, preparar los documentos necesarios y revisar el avance.
-5. **Retomar donde te quedaste.** Guarda el progreso y el contexto pendiente para continuar en otra sesión.
+- **macOS o Windows**.
+- **Una terminal moderna** -- **[Warp](https://www.warp.dev)** en macOS (gratuita, con pestañas y funciones de IA) o **[Windows Terminal](https://aka.ms/terminal)** en Windows (gratuita, con pestañas). También funcionan la Terminal predeterminada de macOS y el Símbolo del sistema de Windows.
+- **[Claude Code](https://www.claude.com/product/claude-code)** -- la herramienta de terminal o línea de comandos (no Claude Desktop, que es una aplicación de chat separada). Requiere una suscripción de Claude (Pro de $20 USD al mes o Max de $100 USD al mes). Instálalo con:
+  ```bash
+  npm install -g @anthropic-ai/claude-code
+  ```
+  Después de instalarlo, reinicia la terminal y escribe `claude --version` para confirmar. Si aparece «command not found», consulta [Solución de problemas](#solución-de-problemas-de-configuración) más abajo.
+- **[Obsidian](https://obsidian.md)** instalado (aplicación gratuita para tomar notas).
+- **Git** -- en macOS, abre la terminal y escribe `git` para comprobarlo (se instala automáticamente). En Windows, descárgalo de [git-scm.com](https://git-scm.com).
 
-Esto sirve para trabajo estructurado de muchos tipos: mejorar un proceso, organizar una contratación, rediseñar un menú, preparar un presupuesto, planificar mantenimiento o desarrollar una herramienta digital.
+> **Importante:** Claude Code y Claude Desktop son productos diferentes. Claude Desktop es una aplicación de chat. Claude Code es una herramienta de terminal que lee tus archivos y ejecuta comandos. Necesitas Claude Code para este sistema. Si solo tienes Claude Desktop instalado, [instala Claude Code](https://www.claude.com/product/claude-code) por separado.
 
-Para tareas pequeñas también puedes pedir algo directo, como registrar un acuerdo o explicar un reporte. El nivel de planificación debe corresponder al tamaño de la tarea.
+### Cuánto cuesta
 
-### Empieza con tus propias palabras
+Workflow Kit es gratuito. El único costo es tu suscripción de Claude (Pro de $20 USD al mes o Max de $100 USD al mes). Para ponerlo en perspectiva: una persona que realiza trabajo habitual de productividad apenas consume una parte de lo que permite la suscripción. Con precios de API, ese mismo trabajo costaría miles al mes. La suscripción es una gran oferta para este tipo de uso.
 
-| Puedes decir | Para qué sirve |
-|---|---|
-| «¿Qué pendientes tengo para hoy?» | Consultar trabajo guardado y prioridades. |
-| «Tuvimos una reunión de cocina. Estos fueron los acuerdos…» | Preparar una minuta con acuerdos y responsables confirmados. |
-| «Quiero mejorar el proceso de reservaciones» | Definir el problema y preparar un plan. |
-| «Anota que hoy terminamos el inventario» | Registrar el avance que reportaste. |
-| «Guarda este pendiente para mañana» | Conservar contexto para retomarlo. |
-| «Explícame este reporte» | Entender un documento con lenguaje claro. |
+> **Nota sobre los límites de uso:** La exploración inicial de `/setup` es la operación individual más exigente. Con el plan Pro ($20 USD al mes), podrías acercarte a tu límite de uso durante una primera sesión intensiva. Si llegas al límite, espera a que se restablezca y continúa. El plan Max ($100 USD al mes) tiene límites más altos y se recomienda para un uso diario intensivo.
 
-## 1. Prepara tu computadora
+### Paso 1: Crea un fork y descarga la bóveda
 
-Necesitas una cuenta de GitHub y estas herramientas:
+Primero, [crea un fork de este repositorio](https://github.com/braincandy-parallel/tamarindos-workflow-kit/fork) en GitHub. Esto crea tu propia copia, bajo tu control.
 
-- **Claude Code**, con acceso habilitado en tu cuenta. Sigue la [guía oficial de instalación](https://code.claude.com/docs/en/setup).
-- **Git**, para descargar tu copia. [Descargar Git](https://git-scm.com/downloads).
-- **Obsidian**, para leer y organizar tus notas. [Descargar Obsidian](https://obsidian.md/download).
+Después, clona **tu fork** (sustituye `your-github-username` por tu nombre de usuario real de GitHub):
 
-Abre Terminal en macOS o PowerShell en Windows y comprueba:
-
-```text
-git --version
-claude --version
-```
-
-Cada comando debe mostrar una versión. Si alguno no se reconoce, termina su instalación y vuelve a abrir la terminal.
-
-## 2. Crea tu propia copia en GitHub
-
-1. Abre [Tamarindos Workflow Kit](https://github.com/braincandy-parallel/tamarindos-workflow-kit).
-2. Pulsa **Use this template → Create a new repository**.
-3. Elige tu cuenta como propietario y un nombre, por ejemplo `mi-espacio-tamarindos`.
-4. Selecciona **Private** para tu espacio de trabajo, donde guardarás tus documentos.
-5. Pulsa **Create repository**.
-
-Esta página es la plantilla de distribución. Tu repositorio será una copia independiente. No hay sincronización automática entre las copias del personal.
-
-## 3. Descarga tu copia
-
-Sustituye `TU_USUARIO` y `TU_REPOSITORIO` por los datos de la copia que acabas de crear.
-
-### Windows (PowerShell)
-
-```powershell
-New-Item -ItemType Directory -Force -Path "$HOME\Documents\Vaults" | Out-Null
-Set-Location "$HOME\Documents\Vaults"
-git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git Tamarindos
-Set-Location Tamarindos
-```
-
-### macOS (Terminal)
-
+**macOS** -- Abre Terminal y pega:
 ```bash
-mkdir -p "$HOME/Documents/Vaults"
-cd "$HOME/Documents/Vaults"
-git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git Tamarindos
-cd Tamarindos
+git clone https://github.com/your-github-username/tamarindos-workflow-kit.git ~/Documents/Vaults/Work\ Vault
 ```
 
-Si ya existe una carpeta `Tamarindos`, utiliza otro nombre en los dos últimos comandos. Si GitHub pide identificarte, inicia sesión con la cuenta que tiene acceso a tu repositorio privado.
-
-## 4. Inicia la configuración en español
-
-Desde la carpeta que descargaste, ejecuta:
-
-```text
-claude
+**Windows** -- Abre la terminal y pega:
+```cmd
+git clone https://github.com/your-github-username/tamarindos-workflow-kit.git "%USERPROFILE%\Documents\Vaults\Work Vault"
 ```
 
-Sigue el inicio de sesión de Claude Code y revisa la solicitud de confianza de la carpeta. Después escribe:
+> **Sustituye `your-github-username`** por tu nombre de usuario real de GitHub. Por ejemplo, si tu usuario de GitHub es `jsmith`, la URL será `https://github.com/jsmith/tamarindos-workflow-kit.git`. Si recibes un error 404, comprueba que creaste el fork del repositorio y escribiste correctamente tu usuario.
 
-> Lee SETUP.md y ayúdame a configurar mi espacio de Tamarindos en español.
+Si el sistema no reconoce `git`, instálalo primero desde [git-scm.com](https://git-scm.com) y después reinicia la terminal.
 
-Claude te preguntará tu nombre, tu función y qué necesitas resolver primero. También instalará las habilidades del kit y te ayudará a crear tu primer pendiente.
+Esto crea una carpeta llamada `Work Vault` dentro de tus Documentos. Esa carpeta **es** tu espacio de trabajo.
 
-Las habilidades se instalan en tu carpeta personal de Claude Code y estarán disponibles en otros proyectos. Si ya tienes versiones instaladas, Claude revisará las diferencias antes de reemplazarlas.
+### Paso 2: Instala las habilidades
 
-Al terminar, vuelve a abrir Claude Code desde esta carpeta para cargar las habilidades instaladas. Escribe `/discover` para verlas o `/pickup` para comenzar con tus pendientes.
+Claude Code necesita que las habilidades estén instaladas para que funcione `/setup`. En tu terminal:
 
-## 5. Abre tus notas en Obsidian
+**macOS:**
+```bash
+cp -r ~/Documents/Vaults/Work\ Vault/skills/* ~/.claude/skills/
+```
 
-En Obsidian, selecciona **Abrir carpeta como bóveda** y elige la carpeta `Tamarindos` que descargaste. Puedes revisar los complementos incluidos antes de habilitarlos. Obsidian y Claude Code trabajan sobre los mismos archivos.
+**Windows:**
+```cmd
+xcopy /E /I "%USERPROFILE%\Documents\Vaults\Work Vault\skills\*" "%USERPROFILE%\.claude\skills\"
+```
 
-## Trabaja en español
+Esto copia todas las carpetas de habilidades al directorio de habilidades de Claude Code. Solo necesitas hacerlo una vez. Después, `/update-wfk` se encarga de las futuras actualizaciones.
 
-Los comandos conservan sus nombres originales. Puedes conversar en español antes y después de usarlos.
+### Paso 3: Ábrela en Obsidian
 
-| Momento | Lo que puedes decir | Comando directo |
-|---|---|---|
-| Iniciar | «Ponme al día» | `/orient` |
-| Retomar | «Ayúdame a retomar mis pendientes» | `/pickup` |
-| Reunión | «Crea una minuta con estos acuerdos» | `/create-note MN` |
-| Reporte | «Prepara un reporte con estos datos» | `/create-note RE` |
-| Definir una mejora | «Ayúdame a definir esta mejora» | `/create-note SPC` |
-| Planificar | «Preparemos un plan de trabajo» | `/create-note PLN` |
-| Registrar | «Anota lo que hicimos hoy» | `/log-work` |
-| Entender | «Explícame este documento» | `/explain` |
-| Guardar contexto | «Guarda esto para después» | `/park` |
-| Terminar sesión | «Guarda mi avance y cerremos» | `/closeout` |
+1. Abre Obsidian.
+2. Haz clic en «Open folder as vault» (Abrir carpeta como bóveda).
+3. Ve a `Work Vault` dentro de tus Documentos.
+4. Haz clic en **Trust** (Confiar) cuando se te solicite; esto habilita los complementos preconfigurados.
 
-La selección automática depende del contexto y de la configuración de cada habilidad. Si Claude no activa la adecuada, usa el comando directo. Las habilidades de invocación manual requieren ese comando. Algunas etiquetas de la interfaz pueden seguir en inglés.
+Verás una barra lateral con carpetas como `01_Notes`, `02_Projects`, etc. Ya están configuradas para ti.
 
-## ¿Dónde se guarda el trabajo?
+> **Nota sobre los complementos:** La plantilla de nota diaria utiliza la función [Bases](https://help.obsidian.md/bases) de Obsidian (integrada desde Obsidian 1.9) para mostrar especificaciones, reportes y pendientes recientes. Si usas una versión anterior de Obsidian, estas secciones mostrarán la sintaxis de inserción en lugar de tablas. Actualiza Obsidian a la versión más reciente para obtener la mejor experiencia.
 
-| Carpeta | Contenido |
-|---|---|
-| `01_Notes/` | Notas diarias, reuniones, pendientes y reportes periódicos. |
-| `02_Projects/` | Proyectos con su contexto, planes y resultados. |
-| `03_Operations/` | Procedimientos y documentación operativa. |
-| `04_Reference/` | Guías y referencias duraderas. |
-| `05_System/` | Plantillas y configuración del flujo de trabajo. |
+### Comprobación previa
 
-Los nombres técnicos se conservan para que las habilidades encuentren sus archivos. Los títulos y textos nuevos se redactan en español. Algunos campos técnicos y encabezados se mantienen en inglés por compatibilidad.
+Antes de continuar, verifica que todo esté en su lugar:
 
-## Primera sesión sugerida
+- [ ] `git --version` devuelve un número de versión.
+- [ ] `claude --version` devuelve un número de versión; si no, consulta [Solución de problemas](#solución-de-problemas-de-configuración).
+- [ ] `ls ~/.claude/skills/orient/SKILL.md` muestra el archivo; las habilidades están instaladas.
+- [ ] Obsidian muestra `Work Vault` con `01_Notes`, `02_Projects`, etc.
 
-Escribe, cambiando los ejemplos por tu situación:
+Si falla alguna comprobación, resuélvela antes de continuar. La exploración de `/setup` requiere las cuatro.
 
-> Trabajo en el área de servicio de Tamarindos. Quiero organizar el seguimiento de los acuerdos de nuestras reuniones. Ayúdame a empezar con un pendiente real y explícame cada paso en español.
+### Paso 4: Configura Claude
 
-Más información: [Configuración inicial](SETUP.md) · [Trabajo diario](WORKFLOW.md) · [Actualizaciones](04_Reference/REF%20-%20Updating%20the%20Workflow%20Kit.md).
+Abre la terminal y ve a la bóveda:
 
-## Origen y mantenimiento
+**macOS:**
+```bash
+cd ~/Documents/Vaults/Work\ Vault
+claude --dangerously-skip-permissions
+```
 
-Esta adaptación parte de [hgreene624/workflow-kit](https://github.com/hgreene624/workflow-kit). Se conservan las habilidades originales en inglés y sus archivos de apoyo. Tamarindos añade la bienvenida, las instrucciones de idioma y los ejemplos del restaurante. El historial original está en [CHANGELOG.md](CHANGELOG.md).
+**Windows:**
+```cmd
+cd "%USERPROFILE%\Documents\Vaults\Work Vault"
+claude --dangerously-skip-permissions
+```
 
-La plantilla no incluye documentos privados del equipo. Usa tu copia privada para tu trabajo y revisa los archivos antes de subirlos a GitHub. Guardar un archivo localmente no significa que ya esté respaldado en GitHub.
+> La opción `--dangerously-skip-permissions` permite que Claude funcione sin pedir permiso para cada lectura de archivo y comando. Se recomienda durante la configuración porque la exploración lee muchos archivos y las solicitudes de permiso la vuelven muy tediosa. Después de la configuración, puedes ejecutar `claude` sin esta opción si prefieres las solicitudes de aprobación.
 
-Versión de origen: [72bd42694fface86fc3af73b464631c6a5308464](https://github.com/hgreene624/workflow-kit/commit/72bd42694fface86fc3af73b464631c6a5308464).
+Después escribe:
+
+```
+/setup
+```
+
+Claude te preguntará tu nombre y después explorará tus archivos y herramientas instaladas para entender tu trabajo y configurarlo todo. Tarda aproximadamente 5 minutos.
+
+### Paso 5: Inicia tu primer proyecto
+
+Después de la configuración, escribe:
+
+```
+/pickup
+```
+
+Esto muestra tres tareas iniciales que te enseñan el sistema mientras lo usas:
+
+| Tarea | Qué aprenderás |
+|------|----------------|
+| **Personalizar tu perfil** | Cómo adaptar el sistema a tu forma específica de trabajar. |
+| **Incorporar tus archivos** | Cómo organizar tu trabajo existente dentro de la bóveda. |
+| **Tu primera especificación** | El flujo principal: describir lo que quieres construir y hacer que Claude lo planifique. |
+
+Complétalas en orden. Al terminar, entenderás cómo encaja todo.
+
+---
+
+## Cómo funciona en el día a día
+
+### Hábitos diarios
+
+| Cuándo | Qué escribir | Qué sucede |
+|--------|--------------|------------|
+| Al comenzar el día | `/orient` y después `/pickup` | Carga tu contexto y muestra qué sigue. |
+| Mientras trabajas | Simplemente habla con Claude | Registra automáticamente lo que estás haciendo. |
+| Nueva tarea estructurada | `/create-spec` | Te guía para definir lo que quieres. |
+| Registrar avances | `/log-work` | Registra lo que lograste. |
+| Al terminar el día | `/closeout` | Guarda tu avance para mañana. |
+
+### Al comenzar el día
+
+Abre Claude en el directorio de tu bóveda y escribe `/orient`. Esto carga tu contexto: en qué estabas trabajando, qué está pendiente y qué sigue. Después escribe `/pickup` para retomar donde te quedaste.
+
+### Al trabajar en algo nuevo
+
+Dile a Claude lo que quieres hacer. Te guiará a lo largo del proceso:
+
+1. **«Quiero…»** -- Claude te entrevista sobre la idea, hace preguntas aclaratorias y redacta una descripción clara de lo que intentas lograr (una especificación o *spec*).
+2. **Revisión** -- Antes de comprometerte a construirlo, Claude busca problemas en la especificación. ¿Hay vacíos? ¿Cosas que podrían salir mal? ¿Conflictos con otro trabajo?
+3. **Plan** -- Claude divide el trabajo en fases. Cada fase entrega algo que realmente puedes ver y comprobar, no solo trabajo invisible en segundo plano.
+4. **Construcción** -- Claude te ayuda a ejecutar cada fase. Para proyectos de código, despliega equipos de agentes de IA. Para otros trabajos, te guía por los pasos y da seguimiento al avance.
+5. **Revisión del resultado** -- Al terminar, Claude revisa la calidad de lo producido.
+
+No tienes que usar todos los pasos. Para tareas pequeñas, simplemente dile a Claude lo que quieres y determinará el nivel de proceso adecuado.
+
+### Al terminar el día
+
+Escribe `/closeout`. Claude registra en qué trabajaste y crea documentos de tipo *pickup*: archivos de contexto que te permiten a ti, o a una futura sesión de Claude, retomar exactamente donde te detuviste. Se acabaron los momentos de «¿En qué me había quedado?».
+
+Piensa en los pickups como una extensión de tu memoria. Cuando estás atendiendo 10 cosas y tu cabeza no puede retener todos los detalles, el pickup los guarda por ti. Al terminar el día, cierras todo; por la mañana, cargas exactamente el contexto que necesitas.
+
+### Sistema de reportes periódicos
+
+Una de las funciones principales del kit es un sistema automatizado de reportes que mantiene a Claude orientado entre sesiones sin que tengas que volver a explicar nada. Produce documentos con tres frecuencias (diaria, semanal y mensual), cada una con un reporte de lo ocurrido y una hoja de ruta para lo que viene.
+
+| Frecuencia | Retrospectiva: qué ocurrió | Próximos pasos: en qué enfocarse |
+|------------|---------------------------|--------------------------------|
+| Diaria | **EOD** (End of Day: cierre del día) | **SOD** (Start of Day: inicio del día) |
+| Semanal | **EOW** (End of Week: cierre de la semana) | **WRM** (Weekly Roadmap: hoja de ruta semanal) |
+| Mensual | **EOM** (End of Month: cierre del mes) | **MRM** (Monthly Roadmap: hoja de ruta mensual) |
+
+**Cómo funciona en la práctica:**
+
+- `/closeout` registra tu sesión y crea pickups.
+- `/end-day` reúne todas tus sesiones en un reporte EOD y después genera el SOD de mañana.
+- Los viernes, `/end-day` también produce un EOW y un WRM que establece 3 metas para la semana siguiente.
+- El último día laborable del mes, produce un EOM y un MRM que establece entre 3 y 5 objetivos para el nuevo mes.
+
+Cuando inicias una sesión con `/orient`, Claude lee el SOD de hoy, el WRM vigente y el MRM vigente. Esto le da tres capas de contexto: qué hacer hoy, de qué trata esta semana y qué busca optimizar este mes. Nunca tienes que volver a explicar tus prioridades.
+
+**El ciclo de aprendizaje:** Cada reporte retrospectivo (EOD, EOW, EOM) incluye una sección de retrospectiva donde las observaciones se etiquetan con una «zona de destino»: el lugar específico donde ese hallazgo produce un cambio permanente, como una nueva regla, una mejora de una habilidad o un ajuste de una meta. Esto hace que los patrones que detectas cambien realmente el comportamiento del sistema, en lugar de quedar documentados y olvidados.
+
+### Comandos principales
+
+| Qué quieres hacer | Qué escribir |
+|-------------------|--------------|
+| Iniciar una sesión | `/orient` |
+| Retomar trabajo anterior | `/pickup` |
+| Crear cualquier documento | `/create-note` (detecta el tipo, o puedes especificar: SD, SPC, PIC, MN, PD, PLN, DD, SO, RE, EB) |
+| Capturar una idea | `/create-note PD` |
+| Iniciar un proyecto nuevo | `/create-note SPC` |
+| Planificar el trabajo | `/create-note PLN` |
+| Delimitar primero el alcance | `/bracket` |
+| Ejecutar el plan | `/implement` |
+| Control de calidad del flujo con tres funciones | `/qa-coord` |
+| Hoja de ruta mensual y semanal | `/roadmap` |
+| Reporte y contexto del cierre del día | `/end-day` |
+| Investigar un campo antes de diseñar | `/oracle-create` |
+| Hacer una pregunta de diseño al oráculo | `/oracle-ask` |
+| Evaluar opciones de código abierto antes de la SPC | `/landscape-survey` |
+| Definir los principios de un sistema | `/create-note SD` |
+| Registrar lo que hiciste | `/log-work` |
+| Entender un documento o tema | `/explain` |
+| Crear notas de reunión | `/create-note MN` |
+| Extraer lecciones de esta sesión | `/distill-lessons` |
+| Generar un prototipo de interfaz a partir de una especificación | `/prototype` |
+| Organizar archivos que llegan | `/intake` |
+| Guardar contexto para después | `/park` |
+| Terminar tu día | `/closeout` |
+| Ver qué habilidades pueden ayudarte | `/discover` |
+
+### También puedes simplemente conversar
+
+Los comandos con barra diagonal no son la única forma de interactuar. Claude entiende el lenguaje natural:
+
+- «Tuve una reunión con el equipo sobre la revisión del presupuesto» (Claude crea notas de reunión).
+- «¿En qué debería trabajar ahora?» (Claude revisa tus pickups y prioridades).
+- «Quiero crear un formulario de registro de clientes para mi negocio de consultoría» (Claude te guía por el proceso de especificación).
+- «¿Puedes explicarme cómo funciona el flujo de especificaciones?» (Claude consulta los documentos de tu bóveda).
+- «Organiza estos archivos que acabo de descargar» (Claude los clasifica dentro de la estructura de tus proyectos).
+
+| Qué quieres hacer | Qué escribir |
+|-------------------|--------------|
+| Revisar trabajo terminado | `/retro` |
+| Ver qué habilidades pueden ayudarte | `/discover` |
+| Revisar tu lista de pendientes | `/pickup` (muestra una clasificación de prioridades cuando existen varios PIC) |
+
+### Cuando algo sale mal
+
+Si Claude parece atascado o sigue intentando la misma solución repetidamente, escribe `/troubleshoot`. Esto activa un modo de diagnóstico que se detiene, investiga la causa raíz y propone una solución específica en lugar de adivinar.
+
+### Cómo se acumula el valor de tu trabajo
+
+Cada proyecto tiene un **registro de proyecto** (`PJL - <Project>.md`) que crece entre sesiones. Cuando vuelves a un proyecto, Claude lee el PJL y sabe qué se construyó, qué decisiones se tomaron, qué falló y qué está desplegado. Cuanto más usas el sistema, más rápido se pone Claude al día con tus proyectos.
+
+---
+
+## Grabación y transcripción
+
+Si tienes un dispositivo de grabación, como un colgante Omi o la grabadora de tu teléfono, el sistema puede convertir automáticamente tus conversaciones en notas estructuradas.
+
+El flujo de trabajo:
+
+1. Graba una conversación, reunión o visita a un sitio.
+2. Entrega la transcripción a Claude con `/create-MN`.
+3. Claude genera notas de reunión estructuradas: temas, decisiones y acciones pendientes.
+4. Las notas se guardan en tu bóveda, se enlazan con tu nota diaria y se pueden buscar.
+
+Esto resulta muy útil para:
+
+- **Reuniones** -- Deja de tomar notas manuales. En su lugar, revisa y corrige las notas generadas automáticamente.
+- **Visitas a sitios** -- Narra lo que ves: inventario de dispositivos, investigación de incidentes o hallazgos de una inspección. Claude lo transcribe y estructura.
+- **Sesiones con gerencia** -- Graba una conversación de 30 minutos en la que tu jefe da 15 indicaciones. Claude las captura todas, las clasifica según tu trabajo activo y no se pierde nada.
+
+El principio es sencillo: **graba todo y estructúralo después.** Cada conversación es una posible fuente de contexto. No necesitas saber de antemano qué será útil; simplemente captúralo y el sistema permitirá encontrarlo.
+
+---
+
+## Trabajar con conocimiento de tu área
+
+### Primero el contexto, después la acción
+
+El principio más importante de todos: **nunca supongas que Claude conoce tu área.** Sonará seguro incluso cuando esté equivocado. Si administras routers MikroTik, no le pidas a Claude que configure uno sin antes proporcionarle la topología de tu red, el inventario de dispositivos y las secciones pertinentes del manual.
+
+Construye el contexto de tu área de esta manera:
+
+1. **Descarga manuales y documentos de referencia.** Convierte los PDF a Markdown; Claude puede ayudarte. Markdown es mucho más rápido y preciso para la IA que PDF.
+2. **Graba tus visitas a sitios.** Narra lo que encuentres. Las transcripciones se convierten en archivos de contexto.
+3. **Crea inventarios.** Enumera tus dispositivos, cuentas, proveedores y procesos. Estos archivos se convierten en la base sobre la que trabaja la IA.
+4. **Guarda tus decisiones.** Cuando elijas el enfoque A sobre el B, documenta por qué. Las sesiones futuras no volverán a debatir preguntas ya resueltas.
+
+### Markdown antes que PDF
+
+Prefiere siempre Markdown (`.md`) a PDF para el procesamiento con IA. Los PDF con diagramas, tablas y formatos complejos son poco fiables para los modelos de lenguaje. Las líneas y las relaciones espaciales se distorsionan. Markdown es texto plano con formato sencillo y los modelos de lenguaje lo procesan perfectamente.
+
+Si tienes un PDF importante, como un manual de proveedor, un documento de cumplimiento o una especificación técnica, conviértelo primero a Markdown. Claude puede ayudarte: «Convierte este PDF en una serie de archivos Markdown». Después, utiliza la versión Markdown como referencia en tu bóveda.
+
+---
+
+## Tu bóveda
+
+Todo se guarda en carpetas organizadas:
+
+| Carpeta | Qué se guarda aquí |
+|---------|--------------------|
+| **01_Notes** | Notas diarias, notas de reuniones, resúmenes semanales y documentos pickup. |
+| **02_Projects** | Tus proyectos; cada uno tiene su propia carpeta con especificaciones, planes y reportes. |
+| **03_Operations** | Contenido operativo específico de tu área. |
+| **04_Reference** | Conocimiento duradero: guías, decisiones y procedimientos operativos. |
+| **05_System** | Plantillas y configuración del flujo de trabajo. |
+
+### Proyectos
+
+Cuando inicias un proyecto nuevo, Claude crea automáticamente una estructura de carpetas:
+
+```
+02_Projects/my-project/
+  specs/          -- Lo que intentas hacer
+  plans/          -- Cómo lo harás, dividido en fases
+  reports/        -- Análisis e investigación
+  reviews/        -- Revisiones de calidad
+  CLAUDE.md       -- Instrucciones de IA específicas de este proyecto
+  lessons.md      -- Lo que has aprendido durante el proceso
+```
+
+No necesitas crear esto manualmente; Claude se encarga cuando ejecutas `/create-spec`.
+
+### Nombres de archivos
+
+Cada documento comienza con un prefijo corto para que siempre puedas identificar de qué se trata de un vistazo:
+
+| Prefijo | Qué significa |
+|---------|---------------|
+| `DN` | Nota diaria. |
+| `MN` | Nota de reunión. |
+| `SPC` | Especificación: lo que estás construyendo. |
+| `PL` | Plan: cómo lo construirás. |
+| `PIC` | Pickup: contexto para retomar el trabajo. |
+| `RE` | Reporte. |
+| `PJL` | Registro de proyecto: historial de trabajo. |
+| `WL` | Registro de trabajo: registro detallado de la sesión. |
+| `REF` | Referencia: conocimiento permanente. |
+| `RET` | Retrospectiva: qué salió bien y qué salió mal. |
+
+---
+
+## Adaptarlo a tu trabajo
+
+### Hacerlo tuyo
+
+Durante la configuración, el sistema explora tu computadora para detectar qué tipo de trabajo realizas y adapta la bóveda en consecuencia: las secciones de las notas diarias, los prefijos de archivos y la estructura de proyectos se ajustan a tu función. El primer pickup de bienvenida te ayuda a afinarlo aún más.
+
+El sistema se adapta con el tiempo:
+
+- **Lecciones** -- Cuando Claude aprende algo sobre cómo funciona tu trabajo, como una herramienta que no se comporta según lo esperado o un proceso que necesita un paso adicional, lo guarda como una lección. Las sesiones futuras leen esas lecciones y evitan repetir los mismos errores.
+- **Configuraciones de agentes** -- Cada proyecto tiene un archivo `CLAUDE.md` donde Claude guarda contexto específico del proyecto. Esto permite que Claude recuerde las tecnologías utilizadas, las convenciones y los detalles problemáticos de cada proyecto.
+- **Pickups** -- Cada vez que dejas de trabajar, el contexto se guarda. Cuando regresas, Claude lee el pickup y sabe exactamente dónde estabas y qué sigue.
+
+### Añadir tus propias habilidades
+
+Las habilidades son como recetas guardadas para Claude: flujos de trabajo repetibles que puedes activar con un comando de barra diagonal. Cada corrección que haces y cada mejora que encuentras se guarda en la habilidad para que no tengas que repetirla. Puedes crear las tuyas:
+
+1. Escribe `/skill-creator` y describe lo que quieres que haga la habilidad.
+2. Claude escribe la habilidad, la prueba y la instala.
+3. Ahora puedes activarla con `/your-skill-name` en cualquier momento.
+
+---
+
+## Mantenerte al día
+
+Para obtener las mejoras más recientes:
+
+```
+/update-wfk
+```
+
+Esto descarga nuevas habilidades y plantillas actualizadas desde este repositorio. Tus archivos personales y los datos de tus proyectos nunca se modifican; solo se actualizan las herramientas del flujo de trabajo.
+
+---
+
+## Contribuir
+
+¿Encontraste un error o tienes una mejora? Ejecuta `/update-wfk contribute` y Claude se encargará de crear el fork, la rama y el pull request por ti.
+
+**Nota sobre autenticación:** Los tokens de acceso personal de GitHub con permisos detallados (*fine-grained PATs*) no pueden crear pull requests en repositorios que pertenecen a otros usuarios. La acción de contribución utiliza OAuth de `gh` en su lugar. Si todavía no lo has hecho, ejecuta `gh auth login` en tu terminal antes de contribuir. Esta es una limitación de la API de GitHub, no un problema de WFK.
+
+También puedes abrir incidencias en [github.com/braincandy-parallel/tamarindos-workflow-kit/issues](https://github.com/braincandy-parallel/tamarindos-workflow-kit/issues) para reportar errores o sugerir funciones.
+
+---
+
+## Solución de problemas de configuración
+
+| Problema | Solución |
+|----------|----------|
+| `claude: command not found` | Reinicia la terminal. Si no funciona, vuelve a ejecutar `npm install -g @anthropic-ai/claude-code` y después cierra y vuelve a abrir la terminal. En macOS, puede que necesites añadir el directorio global de ejecutables de npm a tu PATH: añade `export PATH="$HOME/.npm-global/bin:$PATH"` a tu archivo `~/.zshrc`. |
+| La clonación devuelve 404 | Asegúrate de haber creado primero el fork del repositorio y de haber sustituido `your-github-username` en la URL de clonación por tu usuario real de GitHub. |
+| `git: command not found` | Instala Git desde [git-scm.com](https://git-scm.com) y después reinicia la terminal. |
+| Obsidian muestra una bóveda vacía | Asegúrate de haber abierto la carpeta `Work Vault`, no una carpeta superior. Ve a File > Open Vault > Open folder (Archivo > Abrir bóveda > Abrir carpeta) y selecciona `Work Vault`. |
+| `/setup` indica «skills not found» | Repite el Paso 2, el comando `cp -r`. Las habilidades deben estar en `~/.claude/skills/` para que funcione `/setup`. |
+| Alcanzaste tu límite de uso durante la configuración | Espera a que se restablezca el límite; consulta tu página de cuenta de Claude para ver cuándo. La exploración de `/setup` es la operación individual más exigente. Después de configurar el sistema, el uso normal es mucho más ligero. |
+| Errores de permiso denegado | Asegúrate de ser el propietario del directorio de la bóveda. En macOS, `ls -la ~/Documents/Vaults/` debe mostrar tu usuario como propietario. |
+
+## Licencia
+
+MIT
+
+---
+
+Traducción íntegra al español del [README de Workflow Kit de Holden Greene](https://github.com/hgreene624/workflow-kit/blob/72bd42694fface86fc3af73b464631c6a5308464/README.md), adaptada en nombre y enlaces de repositorio para Tamarindos. Las habilidades y los comandos se conservan en inglés.
