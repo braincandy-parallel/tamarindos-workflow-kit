@@ -1,5 +1,7 @@
 # Tamarindos: instrucciones para Claude Code
 
+Lee también las reglas compartidas de `AGENTS.md`. Su sección Codex se aplica únicamente a Codex.
+
 <!-- WFK:START - Session Startup -->
 ## Inicio de sesión
 

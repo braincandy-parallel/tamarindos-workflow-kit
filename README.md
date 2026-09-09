@@ -55,26 +55,39 @@ Esto funciona para cualquier trabajo estructurado: una funcionalidad de software
 
 ## ¿Usar Codex o Claude Code?
 
-Puedes elegir con qué asistente trabajar sobre tus archivos. **Esta versión del kit incluye la configuración y las habilidades para Claude Code; la adaptación completa de los flujos a Codex todavía está pendiente.**
+Elige tu asistente para trabajar sobre la misma estructura de notas y proyectos.
+Ambas rutas permiten conversar en español y conservan las habilidades en inglés.
 
-| Opción | Qué puedes hacer con esta versión | Por dónde empezar |
-|--------|----------------------------------|-------------------|
-| **Claude Code** | Seguir la configuración del kit y utilizar sus habilidades originales en inglés, conversando en español. | Sigue [Primeros pasos](#primeros-pasos) y la [guía de configuración de Tamarindos](SETUP.md). |
-| **Codex** | Trabajar con los documentos de tu copia mediante solicitudes en español. La instalación y activación de las habilidades de este kit aún requieren adaptación y pruebas. | Consulta la [guía oficial de inicio de Codex](https://developers.openai.com/codex/quickstart) y abre tu copia local como proyecto. |
+| Opción | Qué incluye esta edición | Por dónde empezar |
+|--------|--------------------------|-------------------|
+| **Claude Code** | Las 49 habilidades originales del kit y la configuración de Tamarindos. | Sigue [Primeros pasos](#primeros-pasos) y [SETUP.md](SETUP.md). |
+| **Codex** | 13 adaptadores para configuración inicial, notas, avances, pendientes, cierre de sesión y trabajo estructurado. | Sigue [Usar Tamarindos con Codex](CODEX.md). |
 
 ### Si eliges Claude Code
 
-Continúa con los pasos de instalación de esta página. Las referencias a `/setup`, `/orient`, `/pickup` y los demás comandos corresponden al flujo original de Claude Code.
+Continúa con la guía original traducida que aparece más abajo. Sus comandos
+`/setup`, `/orient`, `/pickup` y demás corresponden a Claude Code.
 
 ### Si eliges Codex
 
-Después de configurar Codex y abrir la carpeta de tu copia, puedes empezar con una solicitud como:
+Crea tu copia mediante **Use this template**, descárgala y abre la carpeta en Codex.
+Las habilidades están incluidas en `.agents/skills/`; no necesitas copiarlas
+manualmente ni instalar Claude Code.
 
-> Responde en español. Revisa los documentos de esta carpeta y explícame cómo está organizado mi espacio de Tamarindos. Por ahora, solo consulta los archivos. Las habilidades de este kit están escritas para Claude Code y todavía no están adaptadas para Codex.
+Escribe:
 
-Los pasos de instalación de habilidades y los comandos de Claude Code que aparecen más abajo no constituyen una configuración de Codex. La versión compatible con ambos necesita instrucciones y carga de habilidades específicas para cada herramienta.
+> Configura mi espacio de Tamarindos en español.
 
-Obsidian sigue siendo el lugar donde puedes leer y organizar tus notas. Al cambiar de asistente, los documentos guardados conservan el contexto disponible; el historial del chat no se transfiere automáticamente.
+También puedes usar `$wfk-setup`. Codex te preguntará los datos que falten y
+preparará tu perfil, notas y primer pendiente. Consulta [CODEX.md](CODEX.md) para
+la instalación, los comandos disponibles y las comprobaciones de una copia nueva.
+
+Obsidian funciona con ambas opciones. Los documentos guardados permiten retomar
+el trabajo con otro asistente; el historial del chat no se transfiere automáticamente.
+
+**Alcance de Codex:** esta edición adapta 13 flujos. Las demás habilidades,
+incluidas las integraciones externas y `/update-wfk`, no se presentan como
+compatibles. Consulta el [estado de validación](05_System/Workflows/REF%20-%20Codex%20Validation.md).
 
 ---
 

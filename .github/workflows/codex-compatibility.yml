@@ -1,0 +1,42 @@
+name: Codex compatibility
+on:
+  push:
+    paths:
+      - '.agents/**'
+      - 'AGENTS.md'
+      - 'CODEX.md'
+      - 'README.md'
+      - 'SETUP.md'
+      - 'WORKFLOW.md'
+      - 'skills/**'
+      - 'tests/**'
+      - '05_System/Workflows/**'
+      - '.github/workflows/codex-compatibility.yml'
+  pull_request:
+    paths:
+      - '.agents/**'
+      - 'AGENTS.md'
+      - 'CODEX.md'
+      - 'README.md'
+      - 'SETUP.md'
+      - 'WORKFLOW.md'
+      - 'skills/**'
+      - 'tests/**'
+      - '05_System/Workflows/**'
+      - '.github/workflows/codex-compatibility.yml'
+permissions:
+  contents: read
+jobs:
+  portable-onboarding:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Validate portable onboarding and packaged references
+        run: python -B -m unittest discover -s tests -v
