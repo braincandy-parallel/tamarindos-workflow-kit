@@ -171,3 +171,9 @@ Estas reglas locales se aplican también al seguir habilidades en inglés y debe
 
 Elige según la intención y el contexto, no solo palabras aisladas. Ante ambigüedad relevante, pregunta. Las menciones heredadas a `/create-spec` y `/create-plan` corresponden a `/create-note SPC` y `/create-note PLN`.
 <!-- LOCAL:END -->
+
+## Notion: colaboración opcional
+
+Si existe .notion/config.json con auto_publish activado, al registrar avances o cerrar
+la sesión sigue scripts/NOTION-WORKFLOW.md después de guardar el trabajo local.
+Consulta NOTION.md para instalar la conexión y entender sus límites.

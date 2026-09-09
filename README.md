@@ -481,3 +481,7 @@ MIT
 ---
 
 Traducción íntegra al español del [README de Workflow Kit de Holden Greene](https://github.com/hgreene624/workflow-kit/blob/72bd42694fface86fc3af73b464631c6a5308464/README.md), adaptada en nombre y enlaces de repositorio para Tamarindos. Las habilidades y los comandos se conservan en inglés.
+
+## Colaboración del equipo en Notion
+
+Consulta [NOTION.md](NOTION.md) para crear las bases compartidas de proyectos, tareas y actualizaciones, y publicar avances al cerrar una sesión con Claude Code o Codex.

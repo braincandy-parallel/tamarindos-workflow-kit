@@ -75,3 +75,9 @@ a comandos o herramientas de Claude en las reglas compartidas.
   conserva los permisos que imponga el entorno de cada persona.
 - Consulta `CODEX.md` para instalación, capacidades y comprobación inicial.
 <!-- CODEX:END -->
+
+## Notion: colaboración opcional
+
+Si existe .notion/config.json con auto_publish activado, al registrar avances o cerrar
+la sesión sigue scripts/NOTION-WORKFLOW.md después de guardar el trabajo local.
+Consulta NOTION.md para instalar la conexión y entender sus límites.

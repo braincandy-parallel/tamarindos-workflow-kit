@@ -10,6 +10,8 @@ on:
       - 'WORKFLOW.md'
       - 'skills/**'
       - 'tests/**'
+      - 'scripts/**'
+      - 'NOTION.md'
       - '05_System/Workflows/**'
       - '.github/workflows/codex-compatibility.yml'
   pull_request:
@@ -22,6 +24,8 @@ on:
       - 'WORKFLOW.md'
       - 'skills/**'
       - 'tests/**'
+      - 'scripts/**'
+      - 'NOTION.md'
       - '05_System/Workflows/**'
       - '.github/workflows/codex-compatibility.yml'
 permissions:

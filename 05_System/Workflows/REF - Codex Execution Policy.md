@@ -95,3 +95,10 @@ unrelated work, bypass failed checks or force-push to resolve a problem.
 Upstream update-wfk is not a supported Codex workflow in this release. Do not
 replace .agents adapters or this policy by running its Claude-oriented installer.
 Updates require reviewing the distribution diff while preserving user files.
+
+## Optional Notion publication
+
+Explicit Notion setup enables automatic team updates after local logging or closeout.
+When .notion/config.json enables auto_publish, follow scripts/NOTION-WORKFLOW.md.
+This scoped publication is authorized by setup; it does not authorize unrelated
+external actions. Missing credentials or failed writes leave publication pending.

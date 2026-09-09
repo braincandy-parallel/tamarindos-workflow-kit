@@ -26,3 +26,6 @@ workflow-kit.config.json
 # Local-only: contains the org-specific patterns to scrub before push.
 # Never sync; never publish.
 skills/update-wfk/scrub-map.json
+
+# Private Notion configuration, pending updates and receipts
+.notion/
