@@ -1,14 +1,69 @@
 # Tamarindos Workflow Kit
 
-**Tu espacio de trabajo con Claude Code, en español.**
+**Un sistema de productividad personal que une Claude Code (inteligencia artificial) y Obsidian (notas) en un espacio donde tú y la IA trabajan con los mismos archivos, el mismo contexto y el mismo historial. Todo en español.**
 
-Organiza pendientes, documenta reuniones y retoma tu trabajo sin empezar de cero cada día. Esta plantilla está pensada para el equipo de Tamarindos: administración, cocina, servicio, reservaciones, mantenimiento y marketing.
-
-No necesitas programar. Escribes lo que necesitas en español y Claude te ayuda a convertirlo en trabajo organizado, con contexto que se guarda en archivos.
+Aquí puedes investigar, organizar información, tomar decisiones, planificar mejoras y dar seguimiento al trabajo de Tamarindos. Lo que documentas hoy queda disponible para las próximas sesiones.
 
 Basado en [Workflow Kit de Holden Greene](https://github.com/hgreene624/workflow-kit). Las habilidades (*skills*) y los comandos se conservan en inglés; la bienvenida y la conversación son en español.
 
-## ¿Qué puedes hacer?
+## ¿Por qué existe?
+
+Cuando trabajas con IA únicamente dentro de una conversación, mantener la continuidad se vuelve difícil. El chat crece, los detalles importantes quedan enterrados y, al abrir una sesión nueva, puedes terminar explicando otra vez el problema, las decisiones y lo que ya habías avanzado.
+
+Workflow Kit da continuidad a ese trabajo mediante una carpeta compartida entre tú y Claude. Esa carpeta, llamada **bóveda** en Obsidian, contiene archivos de texto: notas, acuerdos, planes, reportes, pendientes y lecciones. Tú puedes leerlos y editarlos en Obsidian; Claude Code puede consultarlos y actualizarlos cuando trabajan juntos.
+
+El contexto queda en tus archivos y puede recuperarse entre sesiones. Por ejemplo, si hace tres semanas definiste un cambio en reservaciones, la siguiente sesión puede consultar el plan, revisar el avance registrado y ayudarte a continuar.
+
+Con el uso, tu espacio reúne más información sobre tu trabajo: qué decidiste, por qué lo decidiste, qué funcionó y qué sigue pendiente. Claude puede apoyarse en ese contexto para ayudarte con mayor continuidad y menos explicaciones repetidas. Esa continuidad depende de guardar los avances y consultar los documentos pertinentes.
+
+El sistema te ayuda a:
+
+- **Conservar el trabajo como archivos organizados**, para que tú y Claude puedan consultarlo después.
+- **Construir una base de conocimiento personal mientras trabajas**, al registrar acuerdos, resultados y lecciones durante las tareas.
+- **Retomar proyectos después de días o semanas**, recuperando el contexto y los siguientes pasos documentados.
+- **Aprovechar la experiencia acumulada**, usando el historial de proyectos y decisiones como referencia para el trabajo nuevo.
+
+Para entender cómo se conectan las notas, los proyectos y las sesiones, consulta [Cómo funciona el trabajo diario](WORKFLOW.md).
+
+## ¿Para quién es?
+
+Para personas que coordinan trabajo, resuelven problemas y necesitan dar seguimiento: responsables de operación, administración, cocina, servicio, reservaciones, mantenimiento, marketing y dirección de Tamarindos.
+
+Es especialmente útil cuando tu trabajo implica investigar, comparar opciones, documentar acuerdos, coordinar responsables o convertir una idea en pasos concretos. Cada persona adapta su copia a su función y sus necesidades.
+
+**No necesitas saber programar.** Necesitas aprender a abrir tu carpeta, escribir algunos comandos en la terminal y organizar archivos. La guía de esta página te acompaña en la instalación; después puedes pedirle ayuda a Claude en español para trabajar paso a paso.
+
+### Ejemplos por función
+
+**Operación y servicio:** Comparte las notas de una incidencia durante el servicio. Claude te ayuda a preparar un reporte con lo ocurrido, las acciones tomadas y los pendientes. Al cierre del mes, puedes pedirle que revise los reportes guardados y resuma los problemas recurrentes.
+
+**Dirección y administración:** Después de una reunión con varios encargos, comparte tus notas o la transcripción. Claude te ayuda a separar los acuerdos, identificar responsables confirmados y registrar lo pendiente. Semanas después, puedes consultar qué ocurrió con cada encargo a partir del seguimiento documentado.
+
+**Cocina e inventarios:** Documenta una revisión de inventario o una propuesta para mejorar un procedimiento. Claude puede organizar los datos que le compartes, ayudarte a definir la mejora y preparar un plan. El historial conserva las decisiones y los resultados registrados para la siguiente revisión.
+
+**Mantenimiento y sistemas:** Registra una visita o revisión con equipos, ubicaciones, modelos y fallas observadas. Claude te ayuda a organizar esa información en fichas y reportes que podrá consultar cuando vuelvas a trabajar en esos equipos.
+
+**Reservaciones y eventos:** Reúne requisitos, acuerdos y cambios de un evento en su carpeta de proyecto. Claude puede revisar ese contexto para preparar una lista de pendientes o ayudarte a retomar la coordinación sin reconstruir toda la conversación.
+
+**Marketing:** Guarda objetivos, propuestas, decisiones y resultados de una campaña. Al preparar la siguiente, Claude puede consultar ese historial y ayudarte a identificar qué repetir, qué cambiar y qué información todavía falta.
+
+Estos ejemplos parten de notas, archivos o transcripciones que compartas. Las conexiones con correo, reservaciones, inventarios, transcripción de audio u otros sistemas se configuran por separado.
+
+## ¿Qué puedes hacer con este sistema?
+
+Describe lo que quieres lograr y Claude te acompaña desde la idea hasta el seguimiento:
+
+1. **Definir el trabajo.** Te hace preguntas para aclarar el problema, el resultado esperado y los límites, y lo organiza en una especificación.
+2. **Revisar la propuesta.** El flujo de revisión ayuda a encontrar vacíos, riesgos y preguntas que conviene resolver antes de avanzar.
+3. **Preparar un plan.** Divide el trabajo en etapas con pasos y resultados que puedas comprobar.
+4. **Hacer el trabajo.** Te ayuda a ejecutar el plan, preparar los documentos necesarios y revisar el avance.
+5. **Retomar donde te quedaste.** Guarda el progreso y el contexto pendiente para continuar en otra sesión.
+
+Esto sirve para trabajo estructurado de muchos tipos: mejorar un proceso, organizar una contratación, rediseñar un menú, preparar un presupuesto, planificar mantenimiento o desarrollar una herramienta digital.
+
+Para tareas pequeñas también puedes pedir algo directo, como registrar un acuerdo o explicar un reporte. El nivel de planificación debe corresponder al tamaño de la tarea.
+
+### Empieza con tus propias palabras
 
 | Puedes decir | Para qué sirve |
 |---|---|
@@ -18,8 +73,6 @@ Basado en [Workflow Kit de Holden Greene](https://github.com/hgreene624/workflow
 | «Anota que hoy terminamos el inventario» | Registrar el avance que reportaste. |
 | «Guarda este pendiente para mañana» | Conservar contexto para retomarlo. |
 | «Explícame este reporte» | Entender un documento con lenguaje claro. |
-
-Claude utiliza lo que le compartes y los archivos a los que tiene acceso. Las conexiones con reservaciones, correo, inventarios u otros sistemas se configuran por separado.
 
 ## 1. Prepara tu computadora
 
