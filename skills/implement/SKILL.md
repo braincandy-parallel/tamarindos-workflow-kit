@@ -1,0 +1,244 @@
+---
+name: implement
+description: >-
+  Execute implementation plans with minimal ceremony — dispatch workers, track progress inline
+  in the plan file. No external PM tools. Redesigned based on Anthropic's agent team research: default to the
+  simplest pattern that works, replace agent-based QA with automated checks, eliminate PM relay.
+  Use this skill when the user has a ready plan (PL - *.md) and wants to start building, resume
+  a partial implementation, or when create-plan has just finished. Trigger on "implement", "build
+  this", "start the plan", "kick off", "resume implementation", "let's go", "execute", or the
+  user pointing at a plan file. Third step in the spec>plan>implement pipeline.
+---
+
+# Implement
+
+Execute a plan by dispatching workers directly. You are the orchestrator — no PM tracker, no QA
+auditor agent. Workers report to you. Quality comes from automated checks and live testing, not
+agent-written reports.
+
+**Design principles** (from Anthropic research):
+- Start with the simplest pattern. Escalate only when measurement proves it necessary.
+- Workers communicate via filesystem and git, not relay agents.
+- A test harness that prints pass/fail beats a QA agent that writes 150-line reports.
+- Audit gates only for irreversible operations (schema migrations, bulk emails, production deploys).
+
+## Entry
+
+**Arguments:** $ARGUMENTS — plan file path, spec path, or nothing (will ask).
+
+1. If no plan provided, ask for the path via AskUserQuestion.
+2. Read the plan frontmatter for `ceremony_tier`, `completed`, and `total`.
+3. Read `references/tiers.md` to understand what the tier enables.
+4. Determine state: fresh start (all tasks `todo`), resume (some `done`/`in-progress`), or complete.
+
+## Ceremony Tiers
+
+Plans set `ceremony_tier: light | standard | heavy` in frontmatter. Default is `light`.
+
+| Tier | When | What's on | What's off |
+|------|------|-----------|------------|
+| **light** | UI, CRUD, config, docs, <15 tasks | Workers + smoke checks | Gates, audit agents |
+| **standard** | Auth, schema migrations, production deploys | Workers + smoke checks + security eval + deploy gates | PM tracker, QA auditor agent |
+| **heavy** | Multi-day, multi-team, infrastructure migrations | Everything from v1 | Nothing — full ceremony |
+
+If the plan has no `ceremony_tier`, infer: <15 tasks with no DB/deploy = light. Auth or schema work = standard. Multi-service infrastructure = heavy.
+
+**If tier is `heavy`:** load the original `/implement` skill instead. v2 handles light and standard only.
+
+## Mode + Feature Loading
+
+After reading the plan, before any dispatch, resolve the mode and feature set.
+
+Read the plan's frontmatter for:
+- `mode: <name>` — name of a mode under `~/.claude/skills/implement/modes/`. Default if absent: `mode: default`.
+- `features:` — optional cherry-pick overrides:
+  - `features.add: [feature-name, ...]` — add these features beyond what the mode provides.
+  - `features.remove: [feature-name, ...]` — remove these features from the mode's list.
+  - `features.config: {feature-name: {param: value}}` — override the feature's `default_params` for this PL.
+
+Resolve the active feature list:
+1. Read `~/.claude/skills/implement/modes/<mode>.md`. If `inherits:` is set, recursively resolve the parent mode's features first. Then apply this mode's `adds` and `removes`.
+2. Apply PL frontmatter `features.add` (union with the mode's list).
+3. Apply PL frontmatter `features.remove` (subtract from the resolved list).
+4. For each feature in the final list, read `~/.claude/skills/implement/features/<feature>.md` and apply its `## Modification:` sections to the corresponding parts of this skill's behavior.
+5. Detect conflicts: if any two active features list each other in `conflicts:`, halt and message the user.
+6. Honor `requires:` informationally — if a feature lists `requires:`, log it in the orient summary so the user can confirm before dispatch.
+
+State the active mode + feature list back to the user before any worker dispatch:
+
+> "Active mode: <name>. Active features: <list>. <Any informational `requires:` warnings>."
+
+This step is mandatory before any worker dispatch. Skipping it means the PL's opt-in declarations are ignored.
+
+## Context Loading
+
+Before dispatching work:
+
+0. **Oracle check:** Read the project's PJL frontmatter for `oracles:`. If an oracle exists, note it for mid-build queries. When a worker hits a design choice not covered by the plan, query the oracle: "What's the recommended approach for {specific question}?" Surface to user: "Implementation question: {question}. Oracle recommends {approach} (source: {citation}). Proceed with this approach?" Never silently apply oracle recommendations. See [[SD - Oracle System]].
+1. Read the plan, spec, project `CLAUDE.md` and `lessons.md`, and `REF - Agent Lessons.md`
+2. **Read the Project Log** — If a PJL exists at `02_Projects/<project>/PJL - <Project Name>.md`, read the most recent 3–5 date sections. This is critical context for implementation:
+   - **Decisions already made** — don't re-litigate what's in the PJL
+   - **What was tried and failed** — don't repeat failed approaches
+   - **Current deployment state** — know what's live before making changes
+   - **Known issues** — avoid tripping over documented gotchas
+   Pass relevant PJL context to workers when dispatching them. A worker building Phase 2 needs to know what Phase 1 discovered.
+3. Check task statuses in the plan tables — which are `done`, `in-progress`, `todo`
+4. Scan for activated lessons (L25 deploy != push, L27 environment declaration, L9 schema inspection)
+5. Present summary: "Plan has N phases, M tasks ({completed} done, K ready). Tier: {tier}. Ready?"
+
+## Environment Declaration ({{ORG}} apps only)
+
+Before dispatching ANY {{ORG}} worker, determine and declare the environment: LOCAL, REMOTE, or BOTH.
+If ambiguous, ask the user. Inject the declaration into every worker prompt. See `references/worker.md`.
+
+## Pre-flight: Bracket Declaration (mandatory)
+
+Before dispatching ANY worker, invoke `/bracket` to write a printed contract for this implementation. This is non-negotiable. Implementations without a bracket are how scope creep enters the system silently.
+
+The bracket consumes the plan (which says what to build) and produces a contract (which says the surface, success, and out-of-scope explicitly). The two are not redundant: plans describe phased work, brackets enforce containment at each phase boundary.
+
+For an `/implement` bracket specifically:
+
+- **Surface:** the files, functions, migrations, and prompts that THIS implementation will modify. Pulled from the plan's task tables. List by phase. If the plan touches more than 5 distinct files in Phase 1, that is a sign Phase 1 is too large; consider splitting before bracketing.
+- **Success criteria:** the plan's acceptance criteria, restated as observable checks (verification commands, URLs, query results).
+- **Anti-scope:** at minimum, EVERY item the spec review (or your own judgment) explicitly placed in "future work" or "out of scope." Plus: `/review-spec` invocations during implementation, scope expansions discovered mid-build, "while I'm in here" extensions, refactors not in the plan.
+- **Validation plan:** the 3-5 input minimum reproducer per phase. Live monitoring per FF5.
+- **Handoff trigger:** at minimum: 2 failed phase verifications on the same surface; any STOP signal from user; environment mismatch (worker reports REMOTE deploy when plan said LOCAL).
+
+The bracket is saved to `~/.claude/state/bracket-active.md` and printed in chat. After bracket is set, every status update to the user must reference it: "Phase X of N. Surface item Y of M. Success criterion not yet met. No anti-scope drift."
+
+Worker prompts must include the surface and anti-scope sections so workers know when their proposed change is out of bounds. A worker proposing an edit outside the surface is returned with: "Out of bracket. Reground or surface the request as a re-bracket candidate."
+
+If a phase legitimately needs to expand the surface mid-build (genuine new requirement, not creep), invoke `/bracket` again to re-bracket. Do not silently expand. The user must approve the new bracket.
+
+## Dispatch
+
+Create a team via TeamCreate. Dispatch workers directly — you manage them, no PM relay.
+
+### Worktree Isolation (mandatory for parallel workers)
+
+When dispatching 2+ workers that target the same git repository, each worker MUST get its own
+git worktree. Workers never share HEAD. This is not optional.
+
+**Before dispatching parallel workers:**
+
+1. Identify which workers target the same repo
+2. Create a worktree per worker:
+   ```bash
+   git worktree add /tmp/{team}-{worker-name} -b {branch-name} main
+   ```
+3. Set each worker's CWD to `/tmp/{team}-{worker-name}/` in the dispatch prompt
+4. Include in the worker prompt: "You are working in a git worktree at `/tmp/{team}-{worker-name}/`. All your code changes happen here. Commit and push your branch before completing."
+
+**After all parallel workers complete:**
+
+1. Cherry-pick or merge each worker's branch into an integration branch or main
+2. Clean up worktrees: `git worktree remove /tmp/{team}-{worker-name}`
+3. Verify no worktrees are left: `git worktree list`
+
+**Sequential workers** (one at a time, same repo) do not need worktrees. They can work directly
+in the repo since there's no HEAD contention.
+
+**Why this exists:** See [[IR - Shared Worktree Chaos in Parallel Agent Implementation]]. 4 parallel
+workers sharing one HEAD caused branch contamination, 350+ lines nearly lost, 15 minutes of
+orchestrator untangling. Zero code was lost only because of manual intervention.
+
+### Worker dispatch
+
+For each unblocked task or batch of independent tasks:
+
+1. Choose model per `references/worker.md` model guide
+2. If parallel dispatch to same repo, create worktrees first (see above)
+3. Dispatch with the worker template, injecting: task details, context files, relevant checklists,
+   and worktree path if applicable
+4. Workers report completion to YOU with: what was done, commit hash, verification URL (if {{ORG}})
+5. Update the plan file: set task Status to `done`, add Notes, append to Work Log, increment
+   frontmatter `completed` count
+
+**Parallel dispatch:** Tasks with no dependency on each other run in parallel. Tasks with deps wait.
+When in doubt, run sequentially — parallel bugs cost more than slow progress.
+
+## Pre-flight Readiness
+
+Loaded from `features/pre-flight-readiness-check.md` when active (default-on under `mode: default`).
+
+## Dev Server Concurrency Contract
+
+Loaded from `features/dev-server-concurrency-contract.md` when active (default-on under `mode: default`).
+
+## Quality: Smoke Checks (Not Audit Agents)
+
+After each phase or deploy, run inline checks — not a separate agent. See `references/smoke-checks.md`.
+
+- Build passes? (`pnpm --filter <app> build`)
+- Key routes return expected status? (curl checks)
+- No secrets or debug artifacts in diff? (grep)
+- Schema migration has rollback? (check for down method)
+
+Binary pass/fail. If fail, tell the worker what broke. No 150-line report.
+
+## Quality: Security Eval (Standard Tier Only)
+
+For auth/middleware code changes, run the focused eval from `references/security-eval.md`.
+An LLM review of ONLY the auth diff against a checklist: session validation, error message leaks,
+parameterized queries, CSRF, rate limiting. Skip for CRUD, UI, config.
+
+## Quality: Verifier Pass (Behavioral Changes)
+
+Loaded from `features/verifier-pass-on-behavioral-changes.md` when active (default-on under `mode: default`).
+
+Fires automatically on standard tier with behavioral acceptance criteria, OR on any tier when `worker_count >= 3`. The Worker that wrote the change does NOT verify it; a separate Verifier dispatched with the template in `references/verifier.md` runs pre-selected I/O pairs and produces the PASS/FAIL verdict. See the feature file for the full mechanism, scope rules, and PJL logging requirement.
+
+## Gates
+
+**Light tier:** No gates. Workers self-verify via smoke checks.
+
+**Standard tier:** Gates only for:
+- Schema migrations touching production data (review migration SQL before running)
+- Production deploys (smoke check must pass before reporting "deployed")
+- Bulk operations affecting real users (explicit user approval required)
+- Auth/security code (security eval must pass)
+
+Present gates to the user directly via AskUserQuestion. No PM relay.
+
+## Phase Transitions
+
+If plan has phases:
+- **Default: chain directly to the next phase.** Don't ask "ready for Phase N?" when work is flowing
+  and there's no blocker. The user will interrupt if they want to pause.
+- **Stop and ask only when:** a gate requires user input (bulk operation approval, deploy to production
+  with real users, design decision not covered by spec), or the previous phase had failures that
+  change the plan.
+- Update plan file with phase status at each transition.
+
+## Completion
+
+When all tasks are done:
+
+1. Update plan frontmatter: `status: Complete`, `completed_date: today`, verify `completed` = `total`
+2. Invoke `/log-work` with summary
+4. Invoke `/retro` for retrospective + handoff
+5. Delete team
+6. Offer next steps: `/learn`, `/kb-doc`, spec update
+
+## Partial Shutdown
+
+If session ends before sprint finishes:
+
+1. Update plan file with current progress (all in-progress tasks noted, frontmatter current)
+2. Invoke `/retro` for handoff
+4. Clean up team
+
+## Reference Files
+
+| File | Purpose | When to load |
+|------|---------|-------------|
+| `references/tiers.md` | Tier definitions and flag mappings | Always |
+| `references/worker.md` | Worker dispatch template + model guide | When dispatching |
+| `references/smoke-checks.md` | Automated pass/fail checks | After deploys/phases |
+| `references/security-eval.md` | LLM auth code review prompt | Standard tier, auth changes |
+| `references/checklists/deploy.md` | VPS deploy verification | Workers touching production |
+| `references/checklists/frontend.md` | basePath, AG Grid, rendering | Frontend workers |
+| `references/checklists/db.md` | Schema inspection, migration safety | DB workers |
+| `features/*.md` | Atomic behaviors composed by modes | Per-feature, when active mode includes it |
+| `modes/*.md` | Curated feature collections | At sprint start, after reading PL frontmatter |

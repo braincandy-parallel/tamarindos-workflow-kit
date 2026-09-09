@@ -1,0 +1,258 @@
+{
+  "$schema": "Workflow Kit manifest — declares what ships with the kit vs stays local",
+  "version": "3.7.4",
+  "core_skills": [
+    "apikeys",
+    "article-intel",
+    "auto-research",
+    "best-practice",
+    "bracket",
+    "closeout",
+    "create-note",
+    "discover",
+    "distill-lessons",
+    "dream",
+    "end-day",
+    "explain",
+    "frontend-design",
+    "git-safe",
+    "grill",
+    "impeccable",
+    "implement",
+    "intake",
+    "iterm",
+    "landscape-survey",
+    "learn",
+    "log-work",
+    "oracle-ask",
+    "oracle-create",
+    "oracle-research",
+    "orient",
+    "park",
+    "pickup",
+    "pr-review",
+    "prototype",
+    "qa-coord",
+    "recap",
+    "resolve-ir",
+    "retro",
+    "review-spec",
+    "roadmap",
+    "setup",
+    "skill-creator",
+    "spec-guard",
+    "step-away",
+    "test-check",
+    "troubleshoot",
+    "update-wfk",
+    "usage-audit",
+    "video-intel",
+    "web-theme"
+  ],
+  "org_skills": [
+    "ag-fwis-qa",
+    "ag-investigate",
+    "ag-llm-tune",
+    "ag-local-test",
+    "ag-verify-fix",
+    "backup-vault",
+    "campaign",
+    "case-study",
+    "cc-voting-data",
+    "chawdys",
+    "create-agent",
+    "create-flora-agent",
+    "cron",
+    "dad-eod",
+    "dashboard-brief",
+    "design-export",
+    "document-change",
+    "flora-app",
+    "flora-farms-design",
+    "groom-plane",
+    "kb-analysis",
+    "kb-content",
+    "kb-doc",
+    "kb-extract-edits",
+    "kb-files",
+    "kb-ingest",
+    "kb-site",
+    "kb-structure",
+    "kb-update",
+    "limitless",
+    "ms-graph",
+    "ocg-compile",
+    "ocg-extract",
+    "ocg-ingest",
+    "pipeline-qa",
+    "pipeline-tuner",
+    "ssh-win",
+    "stream-transcripts",
+    "tasting-upload",
+    "triage-admin-issues",
+    "triage-handoffs",
+    "triage-patrick",
+    "update-agent-rules",
+    "vps-deploy"
+  ],
+  "deprecated_skills": [
+    "update-skills",
+    "update-workflow-kit",
+    "yt",
+    "pickup-triage",
+    "wezterm",
+    "plan-spec",
+    "gateway-toggle",
+    "create-concept-brief",
+    "create-MN",
+    "create-pickup",
+    "create-plan",
+    "create-sd",
+    "create-spec",
+    "design",
+    "structure",
+    "create-campaign",
+    "create-pulse-campaign",
+    "kb-to-campaign"
+  ],
+  "renamed_skills": {
+    "plan-spec": {
+      "new_name": "create-plan",
+      "reason": "Rewritten with adaptive depth (light/standard/heavy). No external PM dependency.",
+      "reference_update": "Replace /plan-spec with /create-plan in all skill files, CLAUDE.md, and agents.md"
+    },
+    "create-concept-brief": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: PD). One skill handles all document types.",
+      "reference_update": "Replace /create-concept-brief with /create-note PD"
+    },
+    "create-MN": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: MN). One skill handles all document types.",
+      "reference_update": "Replace /create-MN with /create-note MN"
+    },
+    "create-pickup": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: PIC). One skill handles all document types.",
+      "reference_update": "Replace /create-pickup with /create-note PIC"
+    },
+    "create-plan": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: PLN). One skill handles all document types.",
+      "reference_update": "Replace /create-plan with /create-note PLN"
+    },
+    "create-sd": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: SD). One skill handles all document types.",
+      "reference_update": "Replace /create-sd with /create-note SD"
+    },
+    "create-spec": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: SPC). One skill handles all document types.",
+      "reference_update": "Replace /create-spec with /create-note SPC"
+    },
+    "design": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: DD). One skill handles all document types.",
+      "reference_update": "Replace /design with /create-note DD"
+    },
+    "structure": {
+      "new_name": "create-note",
+      "reason": "Unified into create-note (type: SO). One skill handles all document types.",
+      "reference_update": "Replace /structure with /create-note SO"
+    },
+    "create-campaign": {
+      "new_name": "campaign",
+      "reason": "Unified into the single campaign skill that handles design, refine, and import.",
+      "reference_update": "Replace /create-campaign with /campaign (org-skill, not shipped with kit)"
+    },
+    "create-pulse-campaign": {
+      "new_name": "campaign",
+      "reason": "Unified into the single campaign skill that handles design, refine, and import.",
+      "reference_update": "Replace /create-pulse-campaign with /campaign (org-skill, not shipped with kit)"
+    }
+  },
+  "deprecation_context": {
+    "update-skills": "Replaced by update-wfk (same functionality, better name)",
+    "update-workflow-kit": "Replaced by update-wfk (same functionality, better name)",
+    "yt": "Replaced by video-intel (broader scope: transcription + project evaluation)",
+    "pickup-triage": "Merged into pickup (triage is now built into the pickup flow)",
+    "wezterm": "Terminal-specific automation replaced by iterm (macOS) or user's own terminal config",
+    "plan-spec": "Renamed and rewritten as create-plan, then unified into create-note (type: PLN)",
+    "gateway-toggle": "Deprecated. AI gateway now uses adapter-based routing with automatic provider selection.",
+    "create-concept-brief": "Unified into create-note (type: PD). All document creation now uses one skill with type dispatch.",
+    "create-MN": "Unified into create-note (type: MN). All document creation now uses one skill with type dispatch.",
+    "create-pickup": "Unified into create-note (type: PIC). All document creation now uses one skill with type dispatch.",
+    "create-plan": "Unified into create-note (type: PLN). All document creation now uses one skill with type dispatch.",
+    "create-sd": "Unified into create-note (type: SD). All document creation now uses one skill with type dispatch.",
+    "create-spec": "Unified into create-note (type: SPC). All document creation now uses one skill with type dispatch.",
+    "design": "Unified into create-note (type: DD). All document creation now uses one skill with type dispatch.",
+    "structure": "Unified into create-note (type: SO). All document creation now uses one skill with type dispatch.",
+    "create-campaign": "Unified into the campaign skill (org-only). All campaign work (design, refine, import) now goes through one skill.",
+    "create-pulse-campaign": "Unified into the campaign skill (org-only). All campaign work (design, refine, import) now goes through one skill.",
+    "kb-to-campaign": "Folded into the campaign skill (org-only) — design phase reads KB analysis gaps directly."
+  },
+  "note": "update-workflow is NOT deprecated -- it is the developer's personal vault sync skill. It does not ship with the kit because it is personal, not because it is replaced.",
+  "bundles": {
+    "pipeline-coordination": {
+      "version": "1.0.0",
+      "description": "Coordinated Pipeline Execution delegation layer: a self-contained plugin for running multi-stream work across sessions. Orchestrator plans (owns a meta-plan), coordinator runs one handoff slice (spawns + validates workers), workers build. The /meta-plan-init front door bootstraps a project's meta-plan, drafts the first handoff, and installs the handoff-handling overlays.",
+      "source": "bundles/pipeline-coordination/",
+      "self_contained": true,
+      "overlay_install": true,
+      "components": {
+        "skills": ["meta-plan-init", "meta-coordinator"],
+        "agents": ["meta-orchestrator", "meta-plan-worker"]
+      },
+      "install_targets": {
+        "skills": "~/.claude/skills/",
+        "agents": "~/.claude/agents/"
+      },
+      "requires_runtime_config": false,
+      "anchor_doc": "SD - Coordinated Pipeline Execution"
+    }
+  },
+  "runtime_config": {
+    "path": "~/.claude/wfk-paths.json",
+    "written_by": "/setup (Step 3b)",
+    "validated_by": [
+      "/orient (Step 1b)",
+      "/update-wfk pull (Step 14.4)"
+    ],
+    "schema": {
+      "config_version": "integer, bumped on schema changes",
+      "last_validated": "YYYY-MM-DD, updated by orient on successful validation",
+      "vault_root": "absolute path to vault root",
+      "paths": "object mapping logical names to relative directories under vault_root"
+    }
+  },
+  "sync_rules": {
+    "skills": {
+      "on_push": "Only push core_skills. Strip hardcoded paths and org-specific references.",
+      "on_pull": "Detect user edits, offer to preserve as LOCAL.md, then replace SKILL.md + references/. Never touch evals/, *-workspace/, or user-added files."
+    },
+    "templates": {
+      "on_push": "Push generalized versions. Strip org-specific bases, sections, or references.",
+      "on_pull": "Show diff. User chooses: keep local, take upstream, or merge."
+    },
+    "claude_md": {
+      "on_push": "Push the repo's generalized CLAUDE.md. Never overwrite repo version with vault version.",
+      "on_pull": "Merge by section markers. Replace WFK:START/END blocks, preserve LOCAL:START/END blocks."
+    },
+    "agents_md": {
+      "on_push": "Same as claude_md — push generalized version only.",
+      "on_pull": "Same section-marker merge. Never touch project-level agents.md files."
+    },
+    "never_sync": [
+      "**/lessons.md",
+      "**/02_Projects/*/agents.md",
+      ".obsidian/snippets/",
+      ".obsidian/workspace*.json",
+      ".obsidian/plugins/*/data.json",
+      "**/data.nosync/",
+      "01_Notes/",
+      "03_Operations/",
+      "06_Media/"
+    ]
+  }
+}

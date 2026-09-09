@@ -1,0 +1,429 @@
+---
+name: pickup
+description: >-
+  Load pickup documents (PICs) and resume work. Handles both single-PIC loading and
+  full backlog triage. Use this skill when the user says "pickup", "pick up", "start
+  of day", "what's on my plate", "what do I need to do", "get started", "load the
+  pickup", "continue where I left off", "resume work", "triage pickups", "which
+  pickups are easiest", "work through my pickups", "clear out pickups", "pickup
+  backlog", "how many open pickups", "rank my pickups", "what's the quickest pickup
+  to close", "batch my pickups", "group pickups by project", or points at a specific
+  PIC document. Also trigger when the user opens a new session and says something like
+  "ok what am I doing today" or "what was I working on".
+---
+
+# Pickup
+
+Resume work by loading context from pickup documents. Routes automatically: if the user points at a specific PIC, load it directly. Otherwise, triage all open PICs and help the user choose.
+
+## Path Resolution
+
+Read `~/.claude/wfk-paths.json` at startup. Use `vault_root` and `paths` to resolve all directory references in these instructions (e.g., `{vault_root}/{paths.reports}/Triage/` instead of hardcoded paths, `{paths.projects}` instead of `02_Projects/`). If the file doesn't exist, use the defaults in these instructions and warn once: "No wfk-paths.json found. Using default paths."
+
+## Pre-flight: Orient Check
+
+Before doing anything else, check whether `/orient` has been run in this session. Look for evidence in the conversation history - if you've already read the SOD, vault CLAUDE.md, and lessons.md earlier, orient has been done.
+
+If orient has NOT been run yet, run `/orient` first (invoke the Skill tool with skill: "orient"). Do not skip this - pickup without orient means you'll miss project rules and lessons.
+
+## PIC Lifecycle
+
+PICs have three statuses:
+- **`open`** - created by closeout, waiting to be picked up
+- **`picked-up`** - actively being worked on in a session
+- **`closed`** - work is complete
+
+You are responsible for managing these transitions throughout the session.
+
+---
+
+## Route A: Specific PIC Given
+
+If the user pointed at a specific PIC file or named one explicitly, skip triage and go directly to **Load and Work** below.
+
+## Route B: Triage (No Specific PIC)
+
+### Step 0: Check for Cached Triage (TRI)
+
+Before scanning PICs, check for an existing triage report:
+
+1. Look for `{vault_root}/{paths.reports}/Triage/TRI - {today}.md`
+2. **If today's TRI exists:** load it, then run a **light scan** (Step 0a) to catch changes since it was written. Skip to Step 5 (Present the Triage) with the updated data.
+3. **If today's TRI is missing:** check for the most recent `TRI - *.md` in the same directory.
+   - **If a previous TRI exists:** use it as a seed. Carry forward assessments (complexity, summary, batch verdicts) for PICs that are still open. Only run the full scan (Steps 1-4) on PICs that are **new** since that TRI was written (no matching entry in the previous report). Merge results. The TRI file is written in Step 5 before presenting to the user.
+   - **If no TRI exists at all:** run the full scan (Steps 1-4), then proceed to Step 5 which writes the TRI and presents it.
+
+#### Step 0a: Light Scan (TRI refresh)
+
+When loading a cached TRI, validate it against current PIC state:
+
+1. **Find ALL open and picked-up PICs using Grep, not Glob.** Glob truncates results when there are many PIC files, which causes missed PICs. Instead, run these two Grep calls in parallel with `head_limit: 0` (unlimited results) to guarantee complete coverage:
+   - `Grep pattern="^status: open" glob="**/PIC - *.md" path="{vault_root}/" output_mode="files_with_matches" head_limit=0`
+   - `Grep pattern="^status: picked-up" glob="**/PIC - *.md" path="{vault_root}/" output_mode="files_with_matches" head_limit=0`
+2. For each PIC listed in the TRI, check whether it appears in the grep results (still open/picked-up) or is absent (now closed).
+3. Update the cached triage data:
+   - PICs that no longer appear in grep results: mark as closed in the triage (confirm by reading frontmatter if unsure)
+   - PICs found in grep results but not listed in the TRI (filter to files whose basename starts with `PIC - ` -- discard IRs, delegated tasks, templates): these are **new** -- run the full assessment (Step 2) on just those PICs and add them
+   - PICs in the TRI that no longer exist on disk: remove them
+4. Report changes: "TRI loaded from {time}. Changes since then: N closed, M picked up, P new."
+
+This light scan uses grep to find open PICs by content rather than globbing all files, so it completes in seconds and never misses PICs due to truncation.
+
+### Step 1: Find All Open PICs
+
+1. **Use Grep, not Glob, to find PICs by status.** Glob truncates results when there are many PIC files (50+), which silently drops PICs from the triage. Run these two Grep calls in parallel with `head_limit: 0`:
+   - `Grep pattern="^status: open" glob="**/PIC - *.md" path="{vault_root}/" output_mode="files_with_matches" head_limit=0`
+   - `Grep pattern="^status: picked-up" glob="**/PIC - *.md" path="{vault_root}/" output_mode="files_with_matches" head_limit=0`
+2. From the results, keep only files whose basename starts with `PIC - `. The grep may also match IRs, delegated tasks, or templates that share the `status: open` frontmatter pattern -- discard those.
+3. The filtered results ARE the complete set of open/picked-up PICs.
+4. Report the count: "Found N open pickups (and M in-progress)."
+
+If there are no open PICs, tell the user: "No open pickups found. Starting fresh - what would you like to work on?"
+
+If there's exactly one open PIC, confirm: "One open pickup: [topic]. Want me to load it?" Then proceed to Load and Work.
+
+### Step 2: Assess Each Open PIC
+
+For each open PIC, read the full file and extract:
+
+- **Project**: from `project` frontmatter or inferred from file path
+- **Created**: from `date created` frontmatter
+- **Summary**: one sentence from the `## Context` section
+- **Next steps count**: items in `## What Needs to Happen Next`
+- **Has blockers**: whether `## Blockers or Dependencies` lists anything substantive
+- **Complexity**: LOW / MEDIUM / HIGH
+
+**LOW** - Under 30 minutes: single file change, config tweak, running a documented script, closing stale issues, investigation with clear diagnostic steps.
+
+**MEDIUM** - Meaningful but self-contained: changes across 2-5 files, migrating code to an existing pattern, setting up a documented integration, multi-step diagnostics.
+
+**HIGH** - Multi-system or architectural: cross-service changes, multiple repos/deployment targets, requires user decisions or external input, phase 2+ of a multi-phase plan, large data migrations.
+
+### Step 3: Supersession Check
+
+When multiple PICs exist for the same project area:
+- Check if a newer PIC's "What Was Done" covers what an older PIC's "What Needs to Happen Next" listed
+- If so, recommend closing the older PIC as superseded
+- Flag these explicitly - closing stale PICs is a quick win
+
+### Step 4: Goal-Aligned Clustering
+
+**Read the current MRM** (most recent file in `01_Notes/Reports/MRM/`) and **WRM** (most recent file in `01_Notes/Reports/WRM/`) before clustering. If an MRM exists, cluster PICs by MRM objective first, then by project within each objective. If no MRM exists, fall back to project-only clustering.
+
+**With MRM:** Clusters become objective-aligned: "Objective A (3 PICs)", "Objective B (2 PICs)", "Unaligned (1 PIC)". PICs that don't map to any MRM objective get an "Unaligned" cluster, presented last. If a WRM exists, prioritize PICs that appear in the WRM's "in scope this week" list.
+
+Within each goal cluster, evaluate batch compatibility:
+
+1. **Shared context?** Same codebase, database, or deployment target, loading context once saves ramp-up time
+2. **Shared workstream?** Sequential phases or subtasks of the same effort
+3. **Compatible complexity?** LOW + MEDIUM batches well. Two HIGHs risk fatigue.
+4. **Containment?** Does one PIC's next-steps include the other? Work the parent, close both.
+
+Assign batch verdicts:
+- **BATCH** - shared context makes working them together faster
+- **PARTIAL BATCH** - some PICs in the cluster batch, others don't
+- **SPLIT** - same goal but independent workstreams
+
+### Step 5: Write TRI and Present the Triage
+
+**This step has two paths.** If you arrived here via Step 0a (cached TRI loaded), the TRI's `## Project Clusters` and `## Recommended Session Order` tables are the source of truth, you *render* them, you do not re-cluster or re-number. The Presentation Rules below split into a Render path and an Invent path, follow the one that matches.
+
+**Write the TRI file FIRST, before presenting anything to the user.** The TRI is not a follow-up task -- it is the output artifact of the triage. Compute the triage data (Steps 1-4 or 0a), write the TRI file (see format below), then present the summary to the user. If the TRI is not written before you show the user the "Pick a number" prompt, the triage is incomplete. No exceptions. (In the cached-TRI path, this requirement is satisfied by the Step 0a update.)
+
+#### Step 5a: Live Status Verification (MANDATORY before presenting)
+
+Before presenting the triage to the user, verify the frontmatter status of every PIC that will appear in the presentation. The TRI and grep results are snapshots in time. Another session or agent may have changed a PIC's status since the last scan.
+
+1. For each PIC in the triage, read lines 1-10 of the file to check the `status:` field.
+2. Filter the presentation to show only PICs with `status: open`.
+3. PICs with `status: picked-up` go into the "Validate first" cluster (they may need closing, not working).
+4. Closed PICs that the active SOD or WRM names as goal anchors also go into "Validate first", render them as stale references with the closed status visible, so the user can re-anchor the goal before pickup. Read the TRI's `## Supersession Findings` section to find these.
+5. Other PICs with `status: closed` are removed from the presentation entirely.
+6. If a PIC's status changed since the TRI was written, update the TRI file to match before presenting.
+
+This step prevents showing stale PICs that were already picked up or closed by other sessions. It runs every time, even when the TRI was just generated moments ago. The cost is ~20 file reads (frontmatter only); the cost of skipping it is presenting work that's already done.
+
+**Presentation rules (mandatory):**
+
+*Shared (both paths):*
+- Present ONE grouped-by-cluster view, no separate "by complexity" or "session order" tables.
+- "Validate first" cluster always comes first when populated (per Step 5a items 3-4).
+- Cluster order after Validate-first: SOD priority order, then blocked / dropped clusters last.
+- Within each cluster, order PICs LOW, MED, HIGH. Blocked PICs sink to the bottom.
+- One small table per cluster is fine, or one big table with cluster headers as separator rows.
+- End with: "Pick a number to load, or tell me which cluster to batch."
+
+*Render path (cached TRI loaded via Step 0a):*
+- The TRI's `## Project Clusters` table is the canonical cluster list. Render those clusters in that order. Do not invent new clusters and do not collapse multiple TRI clusters into one.
+- The TRI's `## Recommended Session Order` numbers are the canonical selection IDs. Reuse them verbatim. Do not re-number by walking clusters.
+- Step 5a status changes apply as overlays: move newly-closed-but-SOD-referenced PICs into Validate-first, remove other newly-closed PICs, and if a cluster ends up empty, skip rendering it.
+- If the TRI is missing a `Project Clusters` table or `Recommended Session Order` numbers (malformed), fall back to the Invent path and overwrite the TRI.
+
+*Invent path (no usable TRI, fresh full scan):*
+- Clusters are MRM objectives when available ("Objective A", "Objective B", "Unaligned"). Without an MRM, fall back to project themes from SOD priorities.
+- Every PIC gets a global selection number assigned by walking the clusters top-to-bottom, so #1 is the top of the first cluster.
+- Write the TRI before presenting (per the Step 5 header rule).
+
+**Format:**
+
+```
+### Warning: Validate first (if applicable)
+| # | PIC | Tier | Blockers | Note |
+|---|-----|------|----------|------|
+
+### {Cluster 1 -- e.g. Backend API / Goal A}
+| # | PIC | Tier | Blockers | Note |
+|---|-----|------|----------|------|
+
+### {Cluster 2 -- e.g. Frontend UX / Goal B}
+...
+
+### {Blocked cluster, last}
+...
+```
+
+The `Note` column is one short phrase: SOD priority, batch hint, or blocker reason. Skip the Project column -- the cluster header makes it redundant.
+
+End with: "Pick a number to load, or tell me which cluster to batch."
+
+### Step 6: TRI Maintenance (Session Updates)
+
+The TRI was already written in Step 5 before presenting. This step covers keeping it current as the session progresses:
+
+**When to update the TRI during the session:**
+- When a PIC is picked up: update its status row to `picked-up` and add the agent/session that claimed it
+- When a PIC is closed: update its status row to `closed`
+- When a new PIC is created (via closeout): add it to the appropriate complexity tier
+
+This keeps the TRI as a live document that other agents can read for current state.
+
+---
+
+## TRI File Format
+
+```yaml
+---
+date created: YYYY-MM-DD
+tags: [report, triage]
+category: Report
+type: TRI
+scan_time: "HH:MM"
+total_scanned: N
+seeded_from: "TRI - YYYY-MM-DD.md"  # or "full scan" if no seed
+---
+```
+
+```markdown
+# TRI - Day, Month DD, YYYY
+
+## Triage Summary
+- **Open:** N | **Picked-up:** M | **Parked:** P | **Closed since last TRI:** C
+- **New since last TRI:** list of new PIC names (or "none" / "first scan")
+
+## Recommended Session Order
+| # | PIC | Project | Tier | Blockers | Why this order |
+|---|-----|---------|------|----------|----------------|
+
+> Numbers in this table are the canonical selection IDs. Reuse them in every other table below.
+
+## Project Clusters
+| Cluster | PIC #s | PICs | Complexity Mix | Batch Verdict |
+|---------|--------|------|----------------|---------------|
+
+## Supersession Findings
+- [list, or "None detected"]
+
+## Quick Wins (LOW)
+| # | PIC | Project | Created | Summary | Blockers | Status |
+|---|-----|---------|---------|---------|----------|--------|
+
+## Medium Effort
+| # | PIC | Project | Created | Summary | Blockers | Status |
+|---|-----|---------|---------|---------|----------|--------|
+
+## Heavy Lifts (HIGH)
+| # | PIC | Project | Created | Summary | Blockers | Status |
+|---|-----|---------|---------|---------|----------|--------|
+
+## Claim Log
+| Time | PIC | Agent/Session | Action |
+|------|-----|---------------|--------|
+```
+
+The Claim Log tracks which agent picked up which PIC and when, so other agents can see what's already being worked on without re-reading PIC frontmatter.
+
+---
+
+## Load and Work
+
+Once a PIC is selected (from triage or directly):
+
+### Pre-flight: Log Previous Work
+
+Before loading the new PIC, check whether there's unlogged work from earlier in this session. This matters when the user finishes one PIC and immediately picks up the next without running `/closeout` or `/log-work` in between.
+
+**Check for unlogged work:**
+1. Scan the conversation for completed tasks, file edits, deploys, or decisions since the last `/log-work` or `/closeout` invocation
+2. Check if a PIC was being worked on earlier in this session (look for a PIC that was marked `picked-up` by this session)
+
+**If unlogged work exists:**
+- Tell the user: "You have unlogged work from [previous topic]. Want me to log it before picking up the next one?"
+- If yes: invoke `/log-work` with the previous work context (this handles DN + PJL updates), then ask if the previous PIC should be closed or if it needs a new PIC via `/create-note PIC`
+- If no: continue to Load Context. The work can still be captured at closeout.
+
+**If this is the first pickup of the session** (no prior work), skip this step.
+
+### Verify Project Structure
+
+If the PIC's `project` frontmatter maps to a vault project under `02_Projects/`, verify the project folder is properly set up before loading context:
+
+1. Check that the project directory exists (e.g., `02_Projects/<initiative>/<project>/`)
+2. Check for `CLAUDE.md` at the project root. If missing, create it with a minimal stub:
+   ```markdown
+   # Agent Context - {Project Name}
+   
+   Read root `CLAUDE.md` first.
+   
+   ## Scope
+   
+   {one-line project description}
+   ```
+3. Check for `lessons.md` at the project root. If missing, create it with:
+   ```markdown
+   # Lessons - {Project Name}
+   
+   See root `lessons.md` for cross-project lessons.
+   ```
+4. Check for the PJL file at `02_Projects/<project>/PJL - <Project Name>.md`. If missing, it will be created in the "Log to Project Log" step below.
+
+Do NOT create empty subdirectories (`specs/`, `plans/`, `reports/`). Those are created by the skills that write to them (`/create-note SPC`, `/create-note PL`, `/log-work`). This step only ensures the project root and its config files exist.
+
+### Load Context
+
+1. Read the full PIC document
+2. Read every file listed in `## Key Files` - these are essential context from the previous session
+3. Read the project's `CLAUDE.md` and `lessons.md` (created above if they didn't exist)
+4. If the PIC references a spec or plan, read those too
+5. **Read the Project Log** if one exists at `02_Projects/<project>/PJL - <Project Name>.md`. Read the most recent 2-3 date sections (newest entries). This gives you the project's recent history -- what was built, what decisions were made, what failed, what's deployed. Don't read the entire PJL if it's large; the recent entries are what matter for context loading.
+6. **Repo freshness check (L58).** If the PIC references code under `~/Repos/`, run `git fetch origin && git log HEAD..origin/main --oneline` in that repo before reading any code files. If commits exist upstream, pull first. The local copy may be weeks behind. An entire session was wasted (2026-05-11) because this check was skipped.
+7. **Spec check (L59).** If the PIC's next steps involve implementing a feature on an existing system, glob the project's `specs/` directory for related specs. Read any that match the work domain before starting implementation.
+
+Build understanding of: project scope, what was done, concrete next steps, blockers, and any user preferences from the previous session.
+
+### Environment Declaration (MANDATORY for deployable projects)
+
+If the PIC's project involves deployable code (a web app, API, service, or anything that runs in both a local dev environment and a remote/production environment), declare the target environment in your "Present the Plan" output. Three valid forms:
+
+```
+Environment: LOCAL          -> iterating locally via dev server, no production change expected
+Environment: REMOTE         -> updating production, will run the deploy command after the fix
+Environment: BOTH           -> iterate locally first, then deploy to production
+```
+
+Read the PIC's `## What Was Done` and `## What Needs to Happen Next` to determine which one applies. If the PIC's next steps include a deploy command -> REMOTE or BOTH. If the next steps are pure code iteration with no deploy command -> LOCAL. **If unclear, ASK the user before starting.** Don't guess.
+
+**Verify the PIC's deployment-state claims before acting on them.** A PIC carrying "deployed the fix" in its `## What Was Done` is unverified hearsay until you confirm. Check:
+- CI/CD workflow history to confirm the build ran
+- The live URL to confirm the deployment behaves as expected
+
+PICs carry false "deployed" claims forward when the prior session pushed code without running the deploy command. A git push is not a deployment unless your CI/CD pipeline auto-deploys.
+
+### Mark as Picked Up
+
+Update the PIC's frontmatter immediately:
+- Change `status: open` to `status: picked-up`
+- Add `picked_up_date: YYYY-MM-DD`
+
+### Verify Project Scope (MANDATORY before any PJL write)
+
+The PIC's `project:` frontmatter is a hint, not authority. PICs sometimes bundle work across projects, get filed under the wrong one initially, or drift. Before writing to ANY PJL, validate that the work scope actually matches the named project.
+
+1. Scan the PIC body (`## Context`, `## What Needs to Happen Next`, `## Key Files`) for project signals:
+   - **File paths**: `apps/<app>/`, `services/<svc>/`, `packages/<pkg>/` from the monorepo
+   - **Vault paths**: `02_Projects/<project>/` references
+   - **Container names**: `kb`, `flora-api`, `portal`, `admin`, etc., each map to known projects
+   - **Codebase domains**: function/file names that belong to a specific subsystem
+2. Compare the dominant signals against the `project:` field.
+3. If signals strongly disagree (the work touches a different project's surface than the PIC claims), use AskUserQuestion to confirm the target before writing. Options should include the frontmatter project, the project the signals point to, and "split into multiple PICs."
+4. If the PIC genuinely spans multiple projects, propose splitting before logging anywhere. Multi-project PICs should be split into one PIC per project rather than bundled.
+
+This step prevents the failure mode where a PIC's stale `project:` field routes session work to the wrong PJL. Once a wrong entry lands, it confuses every future agent that reads that PJL for context. The scan is cheap (one additional read of an already-loaded file); the cost of skipping it is lasting cross-project drift.
+
+### Log to Project Log
+
+If a PJL exists for this project, append a session-start entry under today's date heading (create the date heading if it doesn't exist, newest on top):
+
+```markdown
+- **Session start** -- picked up [[PIC - Topic Name]], targeting: {first 1-2 next steps from PIC}
+```
+
+If no PJL exists yet, create one at `02_Projects/<project>/PJL - <Project Name>.md` with standard frontmatter and this first entry. The PJL will accumulate as work is logged via `/log-work` and `/create-note PIC`.
+
+Do this before presenting the plan.
+
+### Present the Plan
+
+1. **One-line context** - what project, what we're continuing
+2. **Where we left off** - key outcome from the previous session (1-2 sentences)
+3. **Today's plan** - the numbered next steps from the PIC
+4. **Blockers** - anything that might get in the way (or "none")
+
+Then begin working on the first step.
+
+---
+
+## Closing PICs
+
+As you work through a PIC's next steps, track progress. When all steps are complete (or the user says they're done), ask:
+
+"The work from [PIC topic] looks complete - [brief summary]. Can I close this pickup?"
+
+If confirmed, update frontmatter:
+- Change `status: picked-up` to `status: closed`
+- Add `closed_date: YYYY-MM-DD`
+
+Append a closing update:
+
+```markdown
+## Closing Update
+**Closed:** YYYY-MM-DD
+**Outcome:** [1-2 sentences: what was accomplished]
+**Artifacts:** [wikilinks to anything produced]
+**Carry-forward:** [Anything not completed that needs a new PIC, or "None - fully resolved"]
+```
+
+**Log work (MANDATORY before closing).** Invoke `/log-work` with the PIC's closing context before writing the closing update. Log-work writes to both the daily note AND the project log (PJL). Pass it: the project name, what was done (from the Closing Update), and any artifacts. Do not manually write to the daily note or PJL - let log-work handle both layers so formatting stays consistent. The PIC cannot be closed until log-work has created the PJL entry for today.
+
+**Documentation check (MANDATORY before closing).** Before writing the Closing Update, scan for stale documentation. The PIC's work may have changed system behavior that existing docs still describe in the old way. Check each of these and update if stale:
+
+1. **System Definitions.** Grep the project's directory and `04_Reference/` for `SD - *.md` files related to the PIC's domain. Read any matches and verify their Mechanics, Principles, and Adjacent Systems sections still match the system's current behavior. If the PIC changed how the system works, update the SD.
+2. **REF documents.** Check for `REF - *.md` files that describe the system (runbooks, work rules, architecture references). Verify they reflect the current state.
+3. **Project CLAUDE.md.** If the PIC introduced new conventions, tools, or architectural patterns, update the project's agent config.
+4. **Lessons.** If the PIC resolved an issue that produced a lesson (`L#`), verify the lesson's trigger condition and action are still accurate.
+
+Report what you checked and whether updates were needed. If an SD, REF, or CLAUDE.md was updated, wikilink the updated file in the Closing Update's Artifacts list.
+
+This gate exists because system changes routinely outpace documentation. A PIC that changes refresh cadence from 6 hours to 30 minutes, or retires an SSH proxy in favor of local auth, leaves stale docs that mislead every future agent until someone catches the drift. Catching it at close is cheaper than discovering it later. (Source: 2026-05-12, NLM Auth PIC closed without updating SD v3, user caught 5 stale claims during sign-off audit.)
+
+### Batch Continuation
+
+If the user chose a batch cluster and just finished one PIC, prompt: "Context is still warm for [next PIC in cluster]. Continue with that, or switch to something else?"
+
+After each PIC closure, update the running tally: "Closed N/M pickups this session. X remaining."
+
+### Lingering PIC Detection
+
+If during a session you notice PICs in `picked-up` status that haven't been actively worked on, proactively ask before the session ends: "[[PIC - Topic]] is still marked as picked-up. Should I close it, carry it forward, or leave it for next session?"
+
+Don't let PICs accumulate in `picked-up` status across multiple sessions.
+
+## Tips
+
+- Some PICs may be closeable just by verifying work was already done in a later session. Check git history or current state before assuming work is needed.
+- If a PIC's next steps have been partially completed, note which items remain.
+- Ask one question at a time when clarifying with the user.
+- Don't force batching - if the user wants to cherry-pick across projects, that's fine. Batch analysis is a recommendation, not a constraint.
+
+## Local Customizations
+
+If `LOCAL.md` exists in this skill directory, load and follow it after these instructions. Local instructions override upstream where they conflict.
