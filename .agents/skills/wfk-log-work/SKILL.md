@@ -22,3 +22,6 @@ Read existing entries and merge by project/topic; repeating the same request
 must not duplicate the same event. Write the detailed PJL entry first, then
 a brief DN summary linked to it. Verify both. Never imply deployment or Git
 backup merely because files were saved. Do not create a WL unless warranted.
+
+Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.
+Use the narrowest subproject PJL and qualified links where necessary. For 10+ tasks or a multi-phase sprint, write a WL and link DN -> PJL -> WL. Keep the DN at three outcome bullets per project, one bold key outcome; detailed technical evidence stays in PJL/WL.

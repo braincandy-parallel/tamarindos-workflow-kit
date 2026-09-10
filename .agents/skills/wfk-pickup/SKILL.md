@@ -22,3 +22,6 @@ claims, PM integrations or worktree claiming.
 4. If the user also requests execution, carry out that authorized task and
    update only its progress. Never claim ownership through a hidden lock.
 No PICs is a valid empty state. Offer a real first task; do not invent backlog.
+
+Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.
+Within an authorized continue/resume request, load the linked SPC, review, plan, PJL and PIC and route to the next dependency-ready stage via wfk-project. A request only to list/triage remains read-only; do not claim or execute work from an informational request.

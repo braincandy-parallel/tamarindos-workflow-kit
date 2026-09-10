@@ -61,7 +61,7 @@ Ambas rutas permiten conversar en español y conservan las habilidades en inglé
 | Opción | Qué incluye esta edición | Por dónde empezar |
 |--------|--------------------------|-------------------|
 | **Claude Code** | Las 49 habilidades originales del kit y la configuración de Tamarindos. | Sigue [Primeros pasos](#primeros-pasos) y [SETUP.md](SETUP.md). |
-| **Codex** | 13 adaptadores para configuración inicial, notas, avances, pendientes, cierre de sesión y trabajo estructurado. | Sigue [Usar Tamarindos con Codex](CODEX.md). |
+| **Codex** | 17 adaptadores para configuración inicial, notas, avances, pendientes, cierre de sesión y trabajo estructurado. | Sigue [Usar Tamarindos con Codex](CODEX.md). |
 
 ### Si eliges Claude Code
 
@@ -485,3 +485,10 @@ Traducción íntegra al español del [README de Workflow Kit de Holden Greene](h
 ## Colaboración del equipo en Notion
 
 Consulta [NOTION.md](NOTION.md) para crear las bases compartidas de proyectos, tareas y actualizaciones, y publicar avances al cerrar una sesión con Claude Code o Codex.
+
+## Flujo obligatorio al iniciar proyectos
+
+Tanto Claude Code como Codex conservan **Spec → revisión → Plan → Implement**,
+la entrevista inicial y los documentos persistentes. Consulta [PIPELINE.md](PIPELINE.md)
+para ejemplos en español, subproyectos, registro, retomado y cierre correcto.
+Esta guía complementa la traducción completa anterior; no la sustituye.

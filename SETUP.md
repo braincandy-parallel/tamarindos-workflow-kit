@@ -1,3 +1,5 @@
+Consulta [PIPELINE.md](PIPELINE.md): incorporación y ciclo de proyectos compartido por Claude Code y Codex.
+
 # Configuración inicial de Tamarindos
 
 Abre Claude Code en esta carpeta y escribe: «Lee SETUP.md y ayúdame a configurar mi espacio de Tamarindos en español».

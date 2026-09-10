@@ -28,3 +28,6 @@ Use canonical closeout content and PIC templates with this portable sequence.
 If the session failed, preserve failures and recovery instructions explicitly;
 do not transform a failed attempt into a success summary. Repeating closeout
 merges the same workstream rather than creating another PIC.
+
+Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.
+Follow the shared lifecycle closeout checklist. Reconcile the active plan first; then log and update/create the matching PIC if the plan lacks continuation context. Distinguish session saved from project complete. Project completion requires all tasks and acceptance evidence; do not close the project merely because setup succeeded.

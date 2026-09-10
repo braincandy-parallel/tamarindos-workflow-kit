@@ -1,3 +1,16 @@
+<!-- LIFECYCLE:START -->
+## Required project lifecycle
+
+Before structured project work, read `05_System/Workflows/REF - Project Lifecycle.md`.
+Start with the narrowest existing project/subproject and saved context. New projects
+require a spec interview, persistent SPC, review and PL before implementation.
+Use supplied answers; ask missing scope questions even when repetitive permission
+requests are unwanted. Continue authorized stages automatically once scope is clear.
+On resume read the active plan/PIC; on closeout update plan, PJL and DN and preserve
+unfinished context. A saved session is not a completed project.
+This contract takes precedence over older conflicting lifecycle instructions below.
+<!-- LIFECYCLE:END -->
+
 # Tamarindos: instrucciones para Claude Code
 
 Lee también las reglas compartidas de `AGENTS.md`. Su sección Codex se aplica únicamente a Codex.

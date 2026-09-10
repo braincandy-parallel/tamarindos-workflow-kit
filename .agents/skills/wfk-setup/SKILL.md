@@ -31,3 +31,6 @@ global skill installer, automatic migration and three-PIC onboarding.
 A repeated setup fills missing scaffolding without resetting the user's profile.
 To change an existing profile, make only the explicitly requested edits after
 reading the current file; do not silently replace it with setup arguments.
+
+Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.
+After setup, explain the persistent lifecycle and demonstrate one brief Spanish project request starting with a scope interview. Do not start the person's first project without a project request. Preserve this contract and the native adapters on subsequent updates.

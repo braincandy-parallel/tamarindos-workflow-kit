@@ -13,13 +13,16 @@ class BundleTests(unittest.TestCase):
         self.assertIn("AGENTS.md", names)
         self.assertNotIn("agents.md", names)
         wrappers = list((ROOT / ".agents/skills").glob("*/SKILL.md"))
-        self.assertEqual(len(wrappers), 13)
+        self.assertEqual(len(wrappers), 17)
         for wrapper in wrappers:
             content = wrapper.read_text(encoding="utf-8")
             expected = wrapper.parent.name
             self.assertIn("\nname: " + expected + "\n", content)
             self.assertIn("\ndescription: >-\n", content)
-            canonical = ROOT / "skills" / expected.removeprefix("wfk-") / "SKILL.md"
+            canonical_name = {"wfk-create-spec": "create-note"}.get(expected, expected.removeprefix("wfk-"))
+            canonical = ROOT / "skills" / canonical_name / "SKILL.md"
+            if expected in {"wfk-project", "wfk-rollup"}:
+                canonical = ROOT / "05_System/Workflows/REF - Project Lifecycle.md"
             self.assertTrue(canonical.is_file(), str(canonical))
             self.assertEqual(wrapper.parent.resolve().parents[2], ROOT)
         self.assertTrue((ROOT / "05_System/Workflows/REF - Codex Execution Policy.md").is_file())
@@ -30,7 +33,7 @@ class BundleTests(unittest.TestCase):
             self.assertTrue(template.is_file(), str(template))
 
     def test_local_document_links_resolve(self):
-        for name in ("README.md", "CODEX.md", "SETUP.md", "WORKFLOW.md"):
+        for name in ("README.md", "CODEX.md", "SETUP.md", "WORKFLOW.md", "PIPELINE.md", "NOTION.md"):
             path = ROOT / name
             content = path.read_text(encoding="utf-8")
             headings = {re.sub(r"[^\w\- ]", "", text.lower()).replace(" ", "-")

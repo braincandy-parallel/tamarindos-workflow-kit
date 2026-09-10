@@ -1,6 +1,6 @@
 # Usar Tamarindos Workflow Kit con Codex
 
-Esta edición incluye **13 adaptadores de Codex**. Se distribuyen con la plantilla
+Esta edición incluye **17 adaptadores de Codex**. Se distribuyen con la plantilla
 y reutilizan las habilidades originales en inglés. La conversación y el contenido
 de tus notas se redactan en español.
 
@@ -89,7 +89,7 @@ sesiones editen el mismo archivo al mismo tiempo.
 ## Alcance de esta edición
 
 Los 49 flujos originales siguen disponibles para Claude Code. Esta edición
-incluye los 13 adaptadores indicados, no una conversión automática de todo el
+incluye los 17 adaptadores indicados, no una conversión automática de todo el
 catálogo. Los flujos restantes, incluidos `end-day`, `roadmap`, `update-wfk`
 y las integraciones externas, aún no tienen adaptador de Codex.
 
@@ -109,3 +109,15 @@ publicaciones, correos ni tickets externos.
 
 Consulta [el estado de validación](05_System/Workflows/REF%20-%20Codex%20Validation.md)
 para distinguir las comprobaciones automatizadas de las pruebas en asistentes reales.
+
+## Ciclo completo de proyectos
+
+Consulta [PIPELINE.md](PIPELINE.md). Los cuatro nuevos adaptadores son
+`$wfk-project`, `$wfk-create-spec`, `$wfk-plan-spec` y `$wfk-rollup`.
+El asistente entrevista antes de construir cuando falta alcance, revisa la
+especificación y guarda el plan. No necesitas invocar cada etapa manualmente.
+Los resúmenes semanal/mensual tienen adaptador propio; esto no equivale a portar
+todo end-day, roadmap ni los hooks de Claude.
+
+Las habilidades nuevas se descubren al abrir una sesión nueva. La disponibilidad
+depende del host: si el catálogo no se actualiza, vuelve a abrir la carpeta/sesión.

@@ -49,3 +49,15 @@ python -B -m unittest discover -s tests -v
 En macOS o Linux utiliza python3 si ese es el nombre del ejecutable.
 Las pruebas crean carpetas temporales con datos ficticios y no modifican las
 notas de la copia. La secuencia manual para una sesión real aparece en CODEX.md.
+
+## 2026-09-09 lifecycle update
+
+Added shared project lifecycle contract, project/spec/plan/rollup adapters and
+Claude project aliases. The 31 local automated tests pass, including 13 lifecycle
+tests covering missing specifications, unresolved reviews, mismatched source links,
+incorrect counters, pending onboarding, missing acceptance and real evidence paths.
+The tests check structural transitions and packaging; they do not prove semantic
+acceptance or guarantee natural-language routing in every model/session.
+Original English skills remain unchanged. Fresh-session interview, cross-session
+resume, and native closeout should be verified on each participant's selected host.
+See PIPELINE.md for the actual acceptance exercise.

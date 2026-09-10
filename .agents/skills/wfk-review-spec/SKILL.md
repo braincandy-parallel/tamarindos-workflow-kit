@@ -21,4 +21,6 @@ do not launch placeholder SSH/database commands.
 Save one RE - Revision de <title>.md under project/reviews/YYYY-MM-DD with
 category Report, source link, findings ranked by severity, evidence and unresolved
 decisions. A request for conversational feedback alone need not create a file.
-Do not edit the spec or produce a plan automatically.
+Apply factual corrections within supplied scope; ask about material decisions. Set source and outcome: ready or changes-required. Within an authorized project lifecycle, continue to planning after resolving findings; a review-only request stops here.
+
+Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.

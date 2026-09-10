@@ -19,16 +19,14 @@ Use the portable policy for tools, paths, optional services and writes.
 - Work from supplied meeting notes without a redundant interview. Retain exact
   facts, decisions and owners. Link the MN in today's DN under Meetings/Calls,
   creating the DN when needed with date created, tags, category and Worked on.
-- For specs, choose brief for a small task; user-specified scope wins. State the
-  tier and ask only if essential scope information is missing.
-- For PL/PLN, require a real source spec or an explicit request to plan directly
-  from supplied scope. If no spec exists, record source as the user's request,
-  never a broken wikilink. Missing optional oracle/review service does not block.
+- For SPC, follow wfk-create-spec and the lifecycle interview. Do not bypass missing scope questions.
+- For PL/PLN, follow wfk-plan-spec. Require a real spec and review; return to missing stages rather than making an unlinked plan.
 - For PIC, search existing open work first and merge matching context. Its
   completed-work/PJL gate applies only when completed work exists; an initial
   onboarding or future-task PIC can say no work has been completed.
 - For EB, link the actual underlying report; if no source exists, ask for it.
-- Do not auto-start reviews, implementation, external tickets or skill retirement
-  after note creation. Link/log only the documented task-related outcome.
+- A note-only request ends at the requested note. Within an authorized project lifecycle, continue the next stage per the shared contract. External actions still need task authorization.
 Retain canonical section structure and technical headings; write prose in Spanish.
 Read the output back and verify references and any requested follow-up links.
+
+Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.

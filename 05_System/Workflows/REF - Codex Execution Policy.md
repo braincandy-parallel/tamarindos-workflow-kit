@@ -9,13 +9,12 @@ category: Reference
 This distribution adapts the original English workflows to Codex. Apply this
 document and the selected repository adapter over Claude-specific execution
 instructions in the canonical skills. User instructions and host permissions
-remain authoritative. This is a portable staff edition, not Luca's personal
-vault policy.
+remain authoritative. This policy supports the persistent project lifecycle in this workspace.
 
 ## Discovery and loading
 
 The supported entry points are the folders in `.agents/skills/wfk-*/`.
-Each loads its canonical `skills/<name>/SKILL.md` plus only relevant references.
+Adapters load canonical skills or the shared lifecycle reference plus relevant resources.
 Do not install these wrappers globally: their relative paths belong to this repo.
 Do not treat all upstream skills as Codex-supported. Unadapted tools may be read
 as reference material but their execution has not been ported.
@@ -34,7 +33,7 @@ registries as a prerequisite. Read available project AGENTS.md/agents.md,
 CLAUDE.md and lessons.md. Missing writing profiles, roadmaps and oracle ledgers
 are optional context, not a reason to block ordinary work.
 
-Respond and write document prose in Spanish. Keep English skill names,
+Use the configured language (Spanish by default in this kit); explicit user language preferences win. Keep English skill names,
 frontmatter keys and machine-readable values, and exact headings that upstream
 workflows locate (Worked on, Meetings/Calls, Context, What Was Done, etc.).
 Translate the content beneath those headings. Do not invent names, dates,
@@ -50,7 +49,7 @@ owners, restaurant rules, evidence or completed work.
   onboarding, tier or approval questions whose answers are already established.
 - Slash-command references are workflow references, not shell commands. Map
   supported names to the matching wfk-* adapter. PL and PLN both mean the PL
-  document template; create-spec means create-note SPC; create-MN means MN.
+  document template; create-spec routes to wfk-create-spec; create-plan and plan-spec route to wfk-plan-spec; create-MN means MN.
 - Do not call TeamCreate, SendMessage, tmux, Claude CLI or hidden agents.
   Perform review perspectives sequentially. Use Codex delegation only when
   requested and available; never claim independent reviewers ran otherwise.
@@ -102,3 +101,13 @@ Explicit Notion setup enables automatic team updates after local logging or clos
 When .notion/config.json enables auto_publish, follow scripts/NOTION-WORKFLOW.md.
 This scoped publication is authorized by setup; it does not authorize unrelated
 external actions. Missing credentials or failed writes leave publication pending.
+
+## Project lifecycle precedence
+
+Read `05_System/Workflows/REF - Project Lifecycle.md` before structured work.
+It controls interview, stage transitions, subprojects, logging, pickups and completion.
+wfk-project routes the lifecycle; wfk-create-spec, wfk-review-spec, wfk-plan-spec and
+wfk-implement execute its stages. wfk-rollup handles weekly/monthly summaries.
+The general lifecycle may chain these workflows within the user's authorized task.
+A note-only, review-only or plan-only request stops at that requested boundary.
+Do not revive the old read-only/Phase 2 migration restrictions for ordinary document work.

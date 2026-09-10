@@ -1,3 +1,5 @@
+Consulta [PIPELINE.md](PIPELINE.md): incorporación y ciclo de proyectos compartido por Claude Code y Codex.
+
 # Cómo trabajar con Tamarindos Workflow Kit
 
 Tu espacio conserva contexto en archivos. Claude Code ayuda a consultarlos y actualizarlos; Obsidian permite leerlos y organizarlos.

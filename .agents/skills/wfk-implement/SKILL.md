@@ -22,3 +22,6 @@ For physical restaurant tasks, prepare instructions/checklists and record the
 human's reported completion; do not mark physical work done because a document
 was written. Stop at a genuine blocker and preserve next steps. External actions
 and Git publication require task authorization, not merely a plan mentioning them.
+
+Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.
+Before executing any task, apply the lifecycle structural gate to the linked SPC, review and PL. Return to the missing stage if any gate fails. Record verification evidence and update counters; never mark the project complete while acceptance or participant rollout is pending.
