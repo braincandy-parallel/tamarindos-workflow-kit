@@ -26,46 +26,49 @@ misma plantilla. No necesitas instalar Claude Code para usar esta ruta.
 Si acabas de añadir el kit a una sesión abierta y no aparecen las habilidades,
 vuelve a abrir el proyecto.
 
-## 2.1 Deja de confirmar cada cambio (opcional)
+## 2.1 Deja de confirmar cada cambio
 
 Codex pregunta antes de escribir archivos o ejecutar comandos según la
 configuración de aprobación de **tu propia instalación**, no de este
 repositorio. Ninguna instrucción dentro de esta plantilla puede desactivar
 esas confirmaciones — es una protección del propio Codex, igual que en
 Claude Code. Por eso este archivo no puede resolverlo por ti: cada persona
-debe activarlo en su computadora si lo quiere.
+activa esto en su propia computadora, como parte de la incorporación que
+Luca guía en persona.
 
-Si quieres que Codex proceda sin pedir confirmación en cada cambio, y pueda
-crear o editar notas en cualquier carpeta **dentro de tu proyecto**, configura
-el modo de aprobación de tu instalación local de Codex.
-
-**Opción recomendada — automático dentro del proyecto:**
+Configuración estándar del equipo Tamarindos: Codex procede sin pedir
+confirmación y puede escribir en cualquier parte de la computadora, no solo
+dentro del proyecto.
 
 Al iniciar Codex desde la carpeta de tu copia:
 
 ```
-codex --full-auto
+codex --dangerously-bypass-approvals-and-sandbox
 ```
 
 o de forma permanente en `~/.codex/config.toml`:
 
 ```toml
 approval_policy = "never"
-sandbox_mode = "workspace-write"
+sandbox_mode = "danger-full-access"
 ```
 
-Con esto, Codex escribe archivos y ejecuta comandos sin pedir confirmación,
-pero se mantiene dentro de la carpeta de tu proyecto. No puede tocar el
-resto de tu computadora.
+Con esto, Codex escribe archivos, crea notas en cualquier carpeta del
+proyecto y ejecuta comandos sin pedir confirmación. `danger-full-access`
+quita el límite de carpeta: Codex también puede escribir fuera del
+proyecto, en cualquier parte de la computadora. Es el mismo nivel que
+Luca ya usa en Claude Code (`--dangerously-skip-permissions`), aplicado
+aquí para que el equipo no pierda tiempo confirmando cada paso durante la
+incorporación guiada.
 
-**Acceso sin restricciones (no recomendado para el equipo):**
+Si alguien del equipo prefiere que Codex se mantenga dentro de la carpeta
+del proyecto en lugar de tener acceso a toda la computadora, puede usar en
+su lugar:
 
-Codex también permite quitar el sandbox por completo
-(`sandbox_mode = "danger-full-access"`), lo que le permite escribir en
-cualquier parte de tu computadora, no solo en el proyecto. El propio Codex
-marca esta opción como peligrosa. No la actives en las copias del personal
-salvo que entiendas el riesgo y lo decidas tú mismo, caso por caso — no es
-algo que este kit deba activar por defecto para todo el equipo.
+```toml
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+```
 
 Los nombres exactos de estas opciones pueden cambiar entre versiones de
 Codex. Si no coinciden con lo que ves, revisa `codex --help` o la
