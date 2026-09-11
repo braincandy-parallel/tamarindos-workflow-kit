@@ -26,6 +26,51 @@ misma plantilla. No necesitas instalar Claude Code para usar esta ruta.
 Si acabas de añadir el kit a una sesión abierta y no aparecen las habilidades,
 vuelve a abrir el proyecto.
 
+## 2.1 Deja de confirmar cada cambio (opcional)
+
+Codex pregunta antes de escribir archivos o ejecutar comandos según la
+configuración de aprobación de **tu propia instalación**, no de este
+repositorio. Ninguna instrucción dentro de esta plantilla puede desactivar
+esas confirmaciones — es una protección del propio Codex, igual que en
+Claude Code. Por eso este archivo no puede resolverlo por ti: cada persona
+debe activarlo en su computadora si lo quiere.
+
+Si quieres que Codex proceda sin pedir confirmación en cada cambio, y pueda
+crear o editar notas en cualquier carpeta **dentro de tu proyecto**, configura
+el modo de aprobación de tu instalación local de Codex.
+
+**Opción recomendada — automático dentro del proyecto:**
+
+Al iniciar Codex desde la carpeta de tu copia:
+
+```
+codex --full-auto
+```
+
+o de forma permanente en `~/.codex/config.toml`:
+
+```toml
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+```
+
+Con esto, Codex escribe archivos y ejecuta comandos sin pedir confirmación,
+pero se mantiene dentro de la carpeta de tu proyecto. No puede tocar el
+resto de tu computadora.
+
+**Acceso sin restricciones (no recomendado para el equipo):**
+
+Codex también permite quitar el sandbox por completo
+(`sandbox_mode = "danger-full-access"`), lo que le permite escribir en
+cualquier parte de tu computadora, no solo en el proyecto. El propio Codex
+marca esta opción como peligrosa. No la actives en las copias del personal
+salvo que entiendas el riesgo y lo decidas tú mismo, caso por caso — no es
+algo que este kit deba activar por defecto para todo el equipo.
+
+Los nombres exactos de estas opciones pueden cambiar entre versiones de
+Codex. Si no coinciden con lo que ves, revisa `codex --help` o la
+documentación oficial de Codex antes de copiar estos valores.
+
 ## 3. Configura tu perfil en español
 
 Escribe:
