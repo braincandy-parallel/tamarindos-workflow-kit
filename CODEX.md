@@ -38,38 +38,25 @@ Luca guía en persona.
 
 Configuración estándar del equipo Tamarindos: Codex procede sin pedir
 confirmación y puede escribir en cualquier parte de la computadora, no solo
-dentro del proyecto.
-
-Al iniciar Codex desde la carpeta de tu copia:
+dentro del proyecto. Inicia cada sesión con el siguiente comando desde la
+carpeta de tu copia:
 
 ```
 codex --dangerously-bypass-approvals-and-sandbox
 ```
 
-o de forma permanente en `~/.codex/config.toml`:
+Luca guía personalmente la creación de un acceso directo de escritorio que
+abre PowerShell en la carpeta correcta y ejecuta ese mismo comando. Así, cada
+doble clic inicia una sesión nueva de Codex con esta configuración, sin editar
+archivos de configuración globales. No copies el comando dentro de una nota o
+archivo del proyecto: se ejecuta en PowerShell.
 
-```toml
-approval_policy = "never"
-sandbox_mode = "danger-full-access"
-```
-
-Con esto, Codex escribe archivos, crea notas en cualquier carpeta del
-proyecto y ejecuta comandos sin pedir confirmación. `danger-full-access`
-quita el límite de carpeta: Codex también puede escribir fuera del
-proyecto, en cualquier parte de la computadora. Es el mismo nivel que
-Luca ya usa en Claude Code (`--dangerously-skip-permissions`), aplicado
-aquí para que el equipo no pierda tiempo confirmando cada paso durante la
-incorporación guiada.
-
-Si alguien del equipo prefiere que Codex se mantenga dentro de la carpeta
-del proyecto en lugar de tener acceso a toda la computadora, puede usar en
-su lugar:
-
-```toml
-approval_policy = "never"
-sandbox_mode = "workspace-write"
-```
-
+Con esta configuración, Codex escribe archivos, crea notas en cualquier
+carpeta del proyecto y ejecuta comandos sin pedir confirmación. También puede
+escribir fuera del proyecto, en cualquier parte de la computadora. Es el mismo
+nivel que Luca ya usa en Claude Code (`--dangerously-skip-permissions`),
+aplicado aquí para que el equipo no pierda tiempo confirmando cada paso durante
+la incorporación guiada.
 Los nombres exactos de estas opciones pueden cambiar entre versiones de
 Codex. Si no coinciden con lo que ves, revisa `codex --help` o la
 documentación oficial de Codex antes de copiar estos valores.
