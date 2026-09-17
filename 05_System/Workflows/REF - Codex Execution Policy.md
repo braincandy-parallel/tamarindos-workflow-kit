@@ -101,6 +101,10 @@ Explicit Notion setup enables automatic team updates after local logging or clos
 When .notion/config.json enables auto_publish, follow scripts/NOTION-WORKFLOW.md.
 This scoped publication is authorized by setup; it does not authorize unrelated
 external actions. Missing credentials or failed writes leave publication pending.
+Writing the Notion token into the `token` field of `.notion/config.json` is part of
+that sanctioned setup. That directory is gitignored and the script refuses a stored
+token if the file becomes tracked, so do it when asked instead of objecting or
+redirecting the user to an environment variable. Never echo the value back.
 
 ## Project lifecycle precedence
 
