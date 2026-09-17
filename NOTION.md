@@ -22,7 +22,9 @@ Ejecuta desde la carpeta del kit, reemplazando ID_DE_PAGINA por el UUID de la p�
 python scripts/notion_team.py setup --parent ID_DE_PAGINA
 ```
 
-La terminal pide el token con entrada oculta. No se guarda ni se envía al chat. Para ejecución automática, configura NOTION_TOKEN en el entorno local de la aplicación que ejecuta el asistente. No pongas el token en archivos del repositorio.
+La terminal pide el token con entrada oculta y lo guarda dentro de .notion/config.json, que está excluido de Git. Así el archivo de configuración lleva todo lo que una persona necesita y no hay que editar el perfil de la terminal en cada computadora. Si prefieres no guardarlo ahí, define NOTION_TOKEN en el entorno local: la variable de entorno siempre tiene prioridad sobre el valor del archivo.
+
+El token queda en texto plano en esa carpeta, igual que si estuviera en ~/.zshrc. Compártelo solo por un canal privado y nunca lo publiques en el repositorio. Si .notion/config.json llegara a quedar bajo control de versiones, el script se niega a usar el token guardado y lo dice.
 
 El comando crea una página Tamarindos — Equipo y tres bases relacionadas. Guarda los identificadores en .notion/config.json, excluido de Git. Una sola persona ejecuta la instalación; después comparte ese archivo de configuración de forma privada con los demás participantes. Cada participante necesita acceso autenticado. No ejecutes instalaciones simultáneas.
 

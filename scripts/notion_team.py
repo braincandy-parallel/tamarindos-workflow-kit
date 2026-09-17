@@ -4,6 +4,7 @@ import getpass
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import uuid
 import urllib.request
@@ -53,6 +54,43 @@ class API:
         except (urllib.error.URLError, TimeoutError):
             raise RuntimeError("Notion connection interrupted. Remote result may exist; retry using the same IDs.") from None
 
+def tracked_by_git(path):
+    """True when Git tracks this file, so a token inside it could be committed."""
+    try:
+        result = subprocess.run(
+            ["git", "ls-files", "--error-unmatch", path.name],
+            cwd=str(path.parent), capture_output=True, text=True, timeout=10)
+        return result.returncode == 0
+    except (OSError, subprocess.SubprocessError):
+        # No Git, or not a repository. Nothing can be committed from here.
+        return False
+
+def resolve_token(config, config_path):
+    """NOTION_TOKEN first, then the token stored in .notion/config.json.
+
+    Storing the token in the config file lets one file carry everything a
+    participant needs, instead of each person editing their shell profile on a
+    different operating system. The file lives under .notion/, which the kit
+    gitignores, so the exposure matches a token in ~/.zshrc rather than adding
+    a new one. The guard below refuses a stored token if that assumption ever
+    breaks and the file becomes tracked.
+    """
+    token = os.environ.get("NOTION_TOKEN")
+    if token:
+        return token
+    stored = (config or {}).get("token")
+    if stored:
+        if tracked_by_git(config_path):
+            raise ValueError(
+                "%s is tracked by Git and holds a token. Remove it from version control "
+                "before relying on a stored token." % config_path)
+        return stored
+    if sys.stdin.isatty():
+        return getpass.getpass("Notion token (hidden): ")
+    raise ValueError(
+        'No token available. Add "token" to .notion/config.json, set NOTION_TOKEN, '
+        "or run interactively.")
+
 def save(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(".tmp")
@@ -78,7 +116,7 @@ def find_child(api, parent, kind, name):
         raise ValueError("Multiple matching Notion children. Resolve duplicates before continuing: " + name)
     return matches[0] if matches else None
 
-def setup(api, parent, path):
+def setup(api, parent, path, token=None):
     parent = str(uuid.UUID(parent))
     config = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"parent": parent, "sources": {}}
     if config["parent"] != parent:
@@ -119,6 +157,10 @@ def setup(api, parent, path):
         save(path, config)
     # Automatic publishing begins only after successful explicit setup.
     config["auto_publish"] = True
+    # Store the token so this one file is everything a participant needs. The
+    # directory is gitignored; tracked_by_git() refuses to use it if that changes.
+    if token and not tracked_by_git(path):
+        config["token"] = token
     save(path, config)
     return config
 
@@ -175,18 +217,15 @@ def main():
         print(json.dumps(schema(), ensure_ascii=False, indent=2))
         return
     config_path = args.root / ".notion" / "config.json"
+    config = None
     if args.command == "publish":
         config = json.loads(config_path.read_text(encoding="utf-8"))
         event = json.loads(args.event.read_text(encoding="utf-8"))
         validate_event(event)
-    token = os.environ.get("NOTION_TOKEN")
-    if not token and sys.stdin.isatty():
-        token = getpass.getpass("Notion token (hidden; never saved): ")
-    if not token:
-        raise ValueError("Set NOTION_TOKEN locally or run interactively. Never paste credentials into chat.")
+    token = resolve_token(config, config_path)
     api = API(token)
     if args.command == "setup":
-        config = setup(api, args.parent, config_path)
+        config = setup(api, args.parent, config_path, token)
         print("https://www.notion.so/" + config["home"].replace("-", ""))
     else:
         page = publish(api, config, event)
