@@ -23,5 +23,16 @@ must not duplicate the same event. Write the detailed PJL entry first, then
 a brief DN summary linked to it. Verify both. Never imply deployment or Git
 backup merely because files were saved. Do not create a WL unless warranted.
 
+Publish to the shared Notion workspace in the same turn, as part of logging, not
+as a separate request. Read `<root>/.notion/config.json`: if it is missing or
+`auto_publish` is not true, skip silently and do not mention Notion. If it is
+configured, follow `<root>/scripts/NOTION-WORKFLOW.md` exactly. Build one event
+per project logged, not one per session; work with no identifiable project is a
+single event with no project_page. Write each event to `.notion/outbox/<UUID>.json`
+before any network call, then run `python scripts/notion_team.py publish` once per
+event. Report each project's real Notion URL. If any event fails, name which
+projects published and which stay pending, and call the run partial. Never present
+a local save as a publication, and never print a token.
+
 Read `<root>/05_System/Workflows/REF - Project Lifecycle.md` and apply its relevant stage rules.
 Use the narrowest subproject PJL and qualified links where necessary. For 10+ tasks or a multi-phase sprint, write a WL and link DN -> PJL -> WL. Keep the DN at three outcome bullets per project, one bold key outcome; detailed technical evidence stays in PJL/WL.

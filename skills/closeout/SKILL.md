@@ -352,6 +352,32 @@ Use the `/log-work` skill's conventions to update today's daily note (`01_Notes/
 
 If there's already an entry for a topic in the daily note's `## Worked on` section, append to it rather than creating a duplicate heading.
 
+## Step 2.4: Shared Notion Publication (MANDATORY when configured)
+
+If `.notion/config.json` exists at the repository root with `auto_publish: true`,
+this session's work must reach the shared workspace before the session is called
+closed. Closing a session without publishing is the single most common way a
+team's shared board goes stale while everyone believes it is current.
+
+`/log-work` owns the publish step (its Step 5) and follows
+`scripts/NOTION-WORKFLOW.md`: one event **per project**, each written to
+`.notion/outbox/` first, then published one at a time. So in the normal case
+Step 2 already did this.
+
+Your job here is to **verify it happened, not to repeat it**:
+
+- Confirm you have a real Notion URL for every project logged this session.
+- Do not publish again for a project that already returned a URL. Republishing
+  builds a new event with a new ID and creates a duplicate record; the stable
+  `ID externo` check only protects a retry of the *same* event file.
+- If any project is still pending in `.notion/outbox/`, retry that event alone,
+  then report the result per project.
+- If `auto_publish` is absent or false, skip this entirely and say nothing.
+
+Report publication state in the final summary as its own line, separate from the
+local saves. "Guardado localmente" and "publicado" are different claims and the
+team reads them differently.
+
 ## Step 2.5: Plan Update Gate (MANDATORY)
 
 Before creating PICs, update every active implementation plan touched this session. Stale plan task statuses cause the next agent to re-do completed work or make wrong assumptions about what's left.

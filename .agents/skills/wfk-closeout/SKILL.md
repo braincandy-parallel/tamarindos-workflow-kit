@@ -17,14 +17,22 @@ Use canonical closeout content and PIC templates with this portable sequence.
    transcript retrieval, local/remote worker sweeps and automatic Git actions.
 2. Log real completed work through wfk-log-work; create missing logs as needed.
    If nothing was completed, say so rather than inventing a progress entry.
-3. Update an existing matching PIC, or create one via wfk-create-note PIC, for
+3. Verify shared publication when `<root>/.notion/config.json` has `auto_publish`
+   true. wfk-log-work owns the publish step and already ran it in step 2, one
+   event per project per `<root>/scripts/NOTION-WORKFLOW.md`. Confirm a real
+   Notion URL exists for every project logged. Do not publish a project twice:
+   a second run builds a new event ID and duplicates the record. Retry only the
+   events still pending in `.notion/outbox/`, and report per project. Skip this
+   silently when publishing is not configured.
+4. Update an existing matching PIC, or create one via wfk-create-note PIC, for
    each genuinely unfinished workstream. Include context, evidence, precise next
    steps, known issues, verified key files and blockers. Completed physical
    actions remain user-reported unless independently verified.
-4. Preserve a supplied return date. Otherwise use tomorrow; restaurant operations
+5. Preserve a supplied return date. Otherwise use tomorrow; restaurant operations
    may run on weekends, so do not skip them unless the user has that schedule.
-5. Close only PICs whose completion is evidenced; leave unresolved work open.
-6. Verify the saved logs/PICs and report paths and the next action.
+6. Close only PICs whose completion is evidenced; leave unresolved work open.
+7. Verify the saved logs/PICs and report paths and the next action. State local
+   saves and shared publication as separate claims.
 If the session failed, preserve failures and recovery instructions explicitly;
 do not transform a failed attempt into a success summary. Repeating closeout
 merges the same workstream rather than creating another PIC.

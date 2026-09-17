@@ -281,6 +281,44 @@ Phase numbers, pass/fail counts, row counts, column names, function names -- all
 ```
 Phase numbers, task counts, and migration counts are for the PJL.
 
+## Step 5 -- Publish to the Shared Notion Workspace (MANDATORY when configured)
+
+Both local layers are now written. Publishing is **part of logging work, not a
+separate favour to ask for**. Do it in the same turn, without prompting the user
+and without asking permission: their initial setup already authorized it.
+
+1. **Check whether this copy is configured.** Read `.notion/config.json` at the
+   repository root. If it is missing, or `auto_publish` is not `true`, skip this
+   step silently and say nothing about Notion. Most kit installations are not
+   connected to a shared workspace and must not be nagged about it.
+
+2. **If it is configured, follow `scripts/NOTION-WORKFLOW.md` exactly.** That
+   file is the procedure and it overrides any summary here. In short: build one
+   event **per project** you just logged, write each to `.notion/outbox/<UUID>.json`
+   before any network call, then run
+   `python scripts/notion_team.py publish .notion/outbox/<UUID>.json` once per
+   event from the repository root.
+
+3. **One update per project, not one per session.** If this session logged three
+   projects, publish three events, each carrying its own `project_page` relation.
+   Work with no identifiable project is one event with no relation. This is what
+   makes a person's work land in the right place in the management digest; a
+   single merged update buries two thirds of it under whichever project you
+   happened to pick.
+
+4. **Report honestly, per event.** Print each project's Notion link. If any event
+   fails, say which projects published and which are still pending in
+   `.notion/outbox/`, and call the run partial. Never report a partial publish as
+   done. Never claim a record reached Notion without the URL the script printed.
+
+5. **If `NOTION_TOKEN` is absent**, report `guardado localmente; publicación
+   pendiente`, leave the outbox files in place, and point the user at `NOTION.md`.
+   Do not prompt for credentials inside an agent tool call, and never print a
+   token value.
+
+Saving files locally is not publishing. Do not imply a teammate can see this work
+until a real Notion URL has come back.
+
 ## Formatting Rules
 
 Load and follow any writing profiles configured for daily notes in your vault. Workflow-specific rules that stay here:
