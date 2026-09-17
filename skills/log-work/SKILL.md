@@ -300,8 +300,11 @@ and without asking permission: their initial setup already authorized it.
    event from the repository root.
 
 3. **One update per project, not one per session.** If this session logged three
-   projects, publish three events, each carrying its own `project_page` relation.
-   Work with no identifiable project is one event with no relation. This is what
+   projects, publish three events. A named project without a verified Notion page
+   is still a separate event, named in its title, with the optional
+   `project_page` field omitted and a pending-relation note; never invent a UUID
+   or merge it into another project. Work with no identifiable project is one
+   additional event with no relation, including alongside named projects. This is what
    makes a person's work land in the right place in the management digest; a
    single merged update buries two thirds of it under whichever project you
    happened to pick.

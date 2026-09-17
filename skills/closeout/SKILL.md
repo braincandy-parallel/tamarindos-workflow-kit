@@ -361,12 +361,17 @@ team's shared board goes stale while everyone believes it is current.
 
 `/log-work` owns the publish step (its Step 5) and follows
 `scripts/NOTION-WORKFLOW.md`: one event **per project**, each written to
-`.notion/outbox/` first, then published one at a time. So in the normal case
-Step 2 already did this.
+`.notion/outbox/` first, then published one at a time. A named project without a
+verified page is still its own event: omit the optional `project_page`, report
+the missing relation in the event, and treat a returned Notion URL as published
+even though the relation remains pending. Genuinely projectless work is one
+additional event, including in a mixed session. So in the normal case Step 2
+already did this.
 
 Your job here is to **verify it happened, not to repeat it**:
 
-- Confirm you have a real Notion URL for every project logged this session.
+- Confirm you have a real Notion URL for every event logged this session,
+  including a genuinely projectless one.
 - Do not publish again for a project that already returned a URL. Republishing
   builds a new event with a new ID and creates a duplicate record; the stable
   `ID externo` check only protects a retry of the *same* event file.

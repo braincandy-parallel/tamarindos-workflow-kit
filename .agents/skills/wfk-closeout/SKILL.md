@@ -19,11 +19,14 @@ Use canonical closeout content and PIC templates with this portable sequence.
    If nothing was completed, say so rather than inventing a progress entry.
 3. Verify shared publication when `<root>/.notion/config.json` has `auto_publish`
    true. wfk-log-work owns the publish step and already ran it in step 2, one
-   event per project per `<root>/scripts/NOTION-WORKFLOW.md`. Confirm a real
-   Notion URL exists for every project logged. Do not publish a project twice:
-   a second run builds a new event ID and duplicates the record. Retry only the
-   events still pending in `.notion/outbox/`, and report per project. Skip this
-   silently when publishing is not configured.
+   event per project per `<root>/scripts/NOTION-WORKFLOW.md`. Named projects
+   without verified pages remain separate events with `project_page` omitted;
+   report the missing relation, but treat a returned Notion URL as published.
+   Genuinely projectless work is one additional event, including in a mixed
+   session. Confirm a real Notion URL exists for every event. Do not publish a
+   project twice: a second run builds a new event ID and duplicates the record.
+   Retry only the events still pending in `.notion/outbox/`, and report per
+   project. Skip this silently when publishing is not configured.
 4. Update an existing matching PIC, or create one via wfk-create-note PIC, for
    each genuinely unfinished workstream. Include context, evidence, precise next
    steps, known issues, verified key files and blockers. Completed physical

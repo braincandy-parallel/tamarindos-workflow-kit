@@ -27,8 +27,11 @@ Publish to the shared Notion workspace in the same turn, as part of logging, not
 as a separate request. Read `<root>/.notion/config.json`: if it is missing or
 `auto_publish` is not true, skip silently and do not mention Notion. If it is
 configured, follow `<root>/scripts/NOTION-WORKFLOW.md` exactly. Build one event
-per project logged, not one per session; work with no identifiable project is a
-single event with no project_page. Write each event to `.notion/outbox/<UUID>.json`
+per project logged, not one per session; a named project without a verified Notion
+page is still a separate event, named in its title, with the optional
+`project_page` field omitted and a pending-relation note, while work with no
+identifiable project is a single additional event with no `project_page`, even
+alongside named projects. Write each event to `.notion/outbox/<UUID>.json`
 before any network call, then run `python scripts/notion_team.py publish` once per
 event. Report each project's real Notion URL. If any event fails, name which
 projects published and which stay pending, and call the run partial. Never present
