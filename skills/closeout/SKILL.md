@@ -370,6 +370,10 @@ already did this.
 
 Your job here is to **verify it happened, not to repeat it**:
 
+- Confirm each event landed under its project, or that a missing relation was
+  reported as pending rather than passed over silently. A project that should
+  exist but does not is a real finding, not a cosmetic one: its work will sit
+  under "Sin proyecto" in the management digest.
 - Confirm you have a real Notion URL for every event logged this session,
   including a genuinely projectless one.
 - Do not publish again for a project that already returned a URL. Republishing

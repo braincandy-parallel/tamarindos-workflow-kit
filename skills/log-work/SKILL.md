@@ -300,11 +300,17 @@ and without asking permission: their initial setup already authorized it.
    event from the repository root.
 
 3. **One update per project, not one per session.** If this session logged three
-   projects, publish three events. A named project without a verified Notion page
-   is still a separate event, named in its title, with the optional
-   `project_page` field omitted and a pending-relation note; never invent a UUID
-   or merge it into another project. Work with no identifiable project is one
-   additional event with no relation, including alongside named projects. This is what
+   projects, publish three events. Set `project_path` to each project's
+   vault-relative folder (e.g. `02_Projects/tamarindos/workflow-kit`) and
+   `project_name` to its readable name: the script finds or creates the matching
+   Notion project page from that path, so work lands under a real project rather
+   than "Sin proyecto". Identity is the path, never the name, so renaming a
+   project in Notion never produces a duplicate. A project whose folder you
+   genuinely cannot determine is still its own event, named in its title, with
+   `project_path` omitted and the relation reported pending; never invent a path
+   or a UUID, and never merge it into another project. Work with no identifiable
+   project is one additional event with no relation, including alongside named
+   projects. This is what
    makes a person's work land in the right place in the management digest; a
    single merged update buries two thirds of it under whichever project you
    happened to pick.

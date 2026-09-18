@@ -174,8 +174,41 @@ def validate_event(event):
     date.fromisoformat(event["date"])
     if event.get("project_page"):
         uuid.UUID(event["project_page"])
+    if event.get("project_path"):
+        if not str(event["project_path"]).strip():
+            raise ValueError("project_path must not be blank.")
+        if not event.get("project_name", "").strip():
+            raise ValueError("project_path requires a human-readable project_name.")
     if event.get("deliverable") and not event["deliverable"].startswith("https://"):
         raise ValueError("Deliverable must be a shared HTTPS link.")
+
+def resolve_project(api, config, path, name, owner):
+    """Find the Proyectos page for a vault-relative project path, creating it once.
+
+    Identity is the path, never the display name: renaming a project in Notion
+    must not produce a second page, and two people writing the name slightly
+    differently must still land on the same one. The path is stored in
+    "ID externo", the same idempotency key the update publisher already uses.
+    """
+    source = config["sources"].get("Proyectos")
+    if not source:
+        raise ValueError("Proyectos data source missing from .notion/config.json.")
+    found = api.call("POST", "data_sources/" + source + "/query", {
+        "filter": {"property": "ID externo", "rich_text": {"equals": path}}})["results"]
+    if len(found) > 1:
+        raise ValueError("Duplicate project ID externo in Notion; resolve before retrying: " + path)
+    if found:
+        return found[0]["id"]
+    properties = {
+        "Nombre": {"title": rich(name)},
+        "ID externo": {"rich_text": rich(path)},
+        "Estado": {"select": {"name": "En curso"}},
+    }
+    if owner and owner.strip():
+        properties["Responsable"] = {"rich_text": rich(owner)}
+    return api.call("POST", "pages", {
+        "parent": {"type": "data_source_id", "data_source_id": source},
+        "properties": properties})["id"]
 
 def publish(api, config, event):
     validate_event(event)
@@ -195,8 +228,12 @@ def publish(api, config, event):
         "Siguiente paso": {"rich_text": rich(event["next"])},
         "Bloqueo": {"rich_text": rich(event["blocker"])},
     }
-    if event.get("project_page"):
-        properties["Proyecto"] = {"relation": [{"id": event["project_page"]}]}
+    relation = event.get("project_page")
+    if not relation and event.get("project_path"):
+        relation = resolve_project(api, config, event["project_path"],
+                                   event["project_name"], event.get("owner", ""))
+    if relation:
+        properties["Proyecto"] = {"relation": [{"id": relation}]}
     if event.get("deliverable"):
         properties["Entregable"] = {"url": event["deliverable"]}
     return api.call("POST", "pages", {

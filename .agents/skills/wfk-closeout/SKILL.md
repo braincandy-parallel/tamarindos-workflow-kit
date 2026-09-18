@@ -23,7 +23,9 @@ Use canonical closeout content and PIC templates with this portable sequence.
    without verified pages remain separate events with `project_page` omitted;
    report the missing relation, but treat a returned Notion URL as published.
    Genuinely projectless work is one additional event, including in a mixed
-   session. Confirm a real Notion URL exists for every event. Do not publish a
+   session. Confirm a real Notion URL exists for every event, and that each event
+   either landed under its project or had a missing relation reported as pending;
+   silently unrelated work ends up under "Sin proyecto" in the digest. Do not publish a
    project twice: a second run builds a new event ID and duplicates the record.
    Retry only the events still pending in `.notion/outbox/`, and report per
    project. Skip this silently when publishing is not configured.
